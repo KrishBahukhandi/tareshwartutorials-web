@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers\Public;
+
+use App\Http\Controllers\Controller;
+use App\Models\FreeResource;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
+
+class ResourceController extends Controller
+{
+    /** Browse notes — filter by class + subject. */
+    public function index(Request $request): View
+    {
+        $classLevel = $request->query('class', '10');
+        $subject    = $request->query('subject');
+
+        $query = FreeResource::published()
+            ->where('class_level', $classLevel)
+            ->orderBy('subject')
+            ->orderBy('chapter');
+
+        if ($subject) {
+            $query->where('subject', $subject);
+        }
+
+        $resources  = $query->get();
+        $taxonomy   = FreeResource::ncertSubjectsByClass();
+        $subjects   = FreeResource::subjectsForClass($classLevel);
+
+        return view('public.resources.index', compact(
+            'resources', 'taxonomy', 'classLevel', 'subject', 'subjects'
+        ));
+    }
+
+    /** Browse PYQs — filter by class. */
+    public function pyqs(Request $request): View
+    {
+        $classLevel = $request->query('class', '10');
+        
+        // Ensure only class 10 and 12 are valid for PYQs based on user request
+        if (!in_array($classLevel, ['10', '12'])) {
+            $classLevel = '10';
+        }
+
+        // We filter by type='pyq' assuming we use the type column for this.
+        // If type column doesn't exist or isn't used this way, we can just filter by something else,
+        // but the DB schema has a 'type' column (from our model inspection earlier).
+        $resources = FreeResource::published()
+            ->where('type', 'pyq')
+            ->where('class_level', $classLevel)
+            ->orderBy('subject')
+            ->orderBy('year', 'desc')
+            ->get();
+
+        return view('public.resources.pyqs', compact('resources', 'classLevel'));
+    }
+
+    /** View a single resource — inline PDF viewer. */
+    public function show(FreeResource $freeResource): View
+    {
+        abort_unless($freeResource->is_published, 404);
+
+        // Increment download/view count
+        $freeResource->increment('download_count');
+
+        $related = FreeResource::published()
+            ->where('class_level', $freeResource->class_level)
+            ->where('subject', $freeResource->subject)
+            ->where('id', '!=', $freeResource->id)
+            ->limit(5)
+            ->get();
+
+        return view('public.resources.show', compact('freeResource', 'related'));
+    }
+
+    /** Direct PDF download. */
+    public function download(FreeResource $freeResource): Response
+    {
+        abort_unless($freeResource->is_published, 404);
+        $freeResource->increment('download_count');
+
+        return response()->download(storage_path('app/public/'.$freeResource->file_path));
+    }
+}
