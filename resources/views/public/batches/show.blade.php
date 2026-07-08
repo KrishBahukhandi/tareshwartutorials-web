@@ -1,6 +1,39 @@
 @extends('layouts.public')
 
 @section('title', $batch->name . ' - Tareshwar Tutorials')
+@section('description', $batch->name . ' — ' . $batch->grade . ' ' . $batch->subjectNames() . ' live batch. ' . $batch->formattedSchedule() . '. ' . ($batch->price > 0 ? 'Enroll online now.' : 'Free to join.'))
+@section('og_type', 'website')
+
+@push('json-ld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'Course',
+    'name' => $batch->name,
+    'description' => $batch->name.' — '.$batch->grade.' '.$batch->subjectNames().' live batch.',
+    'provider' => [
+        '@type' => 'EducationalOrganization',
+        'name' => 'Tareshwar Tutorials',
+        'sameAs' => url('/'),
+    ],
+    'hasCourseInstance' => [
+        '@type' => 'CourseInstance',
+        'courseMode' => 'Blended',
+        'courseSchedule' => [
+            '@type' => 'Schedule',
+            'repeatFrequency' => 'Weekly',
+            'byDay' => $batch->schedule_days ?? [],
+        ],
+    ],
+    'offers' => [
+        '@type' => 'Offer',
+        'price' => (string) $batch->price,
+        'priceCurrency' => 'INR',
+        'availability' => $batch->canAcceptEnrollment() ? 'https://schema.org/InStock' : 'https://schema.org/SoldOut',
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 @php

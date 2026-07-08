@@ -1,6 +1,27 @@
 @extends('layouts.public')
 
 @section('title', $freeResource->title . ' | Tareshwar Tutorials')
+@section('description', Str::limit($freeResource->description ?? ($freeResource->title . ' — free ' . $freeResource->subject . ' study material for Class ' . $freeResource->class_level . '. View online or download the PDF.'), 160))
+@section('og_type', 'article')
+
+@push('json-ld')
+<script type="application/ld+json">
+{!! json_encode([
+    '@context' => 'https://schema.org',
+    '@type' => 'LearningResource',
+    'name' => $freeResource->title,
+    'description' => $freeResource->description ?? $freeResource->title,
+    'learningResourceType' => ucfirst($freeResource->type),
+    'educationalLevel' => 'Class '.$freeResource->class_level,
+    'about' => $freeResource->subject,
+    'provider' => [
+        '@type' => 'EducationalOrganization',
+        'name' => 'Tareshwar Tutorials',
+        'sameAs' => url('/'),
+    ],
+], JSON_UNESCAPED_SLASHES) !!}
+</script>
+@endpush
 
 @section('content')
 

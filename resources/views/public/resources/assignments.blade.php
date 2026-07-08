@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Assignments Class ' . $classLevel . ' | Tareshwar Tutorials')
+@section('description', 'Free downloadable practice assignments for Class ' . $classLevel . ' students, covering all major subjects.')
 
 @section('content')
 

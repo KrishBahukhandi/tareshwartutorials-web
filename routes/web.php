@@ -12,6 +12,8 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Public\ResourceController as PublicResourceController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\SearchController;
+use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\Student\AssignmentController as StudentAssignmentController;
 use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
@@ -31,7 +33,10 @@ use Illuminate\Support\Facades\Route;
 
 // ─── Public ───────────────────────────────────────────────────────────────────
 Route::get('/', [PublicController::class, 'index'])->name('home');
+Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 Route::get('/batches', [PublicController::class, 'batches'])->name('batches.index');
+Route::get('/search', [SearchController::class, 'index'])->name('search');
 Route::get('/batches/{batch}', [PublicController::class, 'showBatch'])->name('batches.show');
 Route::get('/support', [PublicController::class, 'support'])->name('support');
 Route::get('/about', [PublicController::class, 'about'])->name('about');

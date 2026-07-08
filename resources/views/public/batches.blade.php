@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Browse Batches - Tareshwar Tutorials')
+@section('description', 'Explore live, teacher-led batches for Class 10 and Class 12 — check schedules, seat availability, and pricing, and enroll online.')
 
 @section('content')
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">

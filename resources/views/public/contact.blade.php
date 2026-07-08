@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Contact Us | Tareshwar Tutorials')
+@section('description', 'Get in touch with Tareshwar Tutorials — visit our centre in Panchkula, Haryana, or reach out by phone or email.')
 
 @section('content')
 

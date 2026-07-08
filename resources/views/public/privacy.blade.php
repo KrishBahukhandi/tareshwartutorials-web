@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Privacy Policy | Tareshwar Tutorials')
+@section('description', 'Read how Tareshwar Tutorials collects, uses, and protects your personal information.')
 
 @section('content')
 

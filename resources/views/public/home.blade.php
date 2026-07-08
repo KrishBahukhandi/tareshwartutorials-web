@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Tareshwar Tutorials | Master Your Future with Academic Precision')
+@section('description', 'Join live CBSE-aligned batches for Class 10 and Class 12 with expert teachers, or browse free NCERT notes and previous year question papers — no sign-up required.')
 
 @section('content')
 

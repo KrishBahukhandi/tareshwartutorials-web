@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Free NCERT Notes Class ' . $classLevel . ($subject ? ' — ' . $subject : '') . ' | Tareshwar Tutorials')
+@section('description', 'Free NCERT notes for Class ' . $classLevel . ($subject ? ' ' . $subject : '') . '. Read online or download as PDF — no sign-up required.')
 
 @section('content')
 

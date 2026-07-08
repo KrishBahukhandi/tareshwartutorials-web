@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Terms of Service | Tareshwar Tutorials')
+@section('description', 'Read the terms of service governing enrollment, payments, and use of Tareshwar Tutorials\' live batches and study resources.')
 
 @section('content')
 

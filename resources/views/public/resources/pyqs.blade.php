@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'Previous Year Questions (PYQs) Class ' . $classLevel . ($subject ? ' — ' . $subject : '') . ' | Tareshwar Tutorials')
+@section('description', 'CBSE Class ' . $classLevel . ($subject ? ' ' . $subject : '') . ' previous year question papers, free to download — practice with real board exam papers.')
 
 @section('content')
 

@@ -1,6 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'About Us | Tareshwar Tutorials')
+@section('description', 'Learn about Tareshwar Tutorials — small-batch, teacher-led coaching focused on academic precision for Class 10 and Class 12 students.')
 
 @section('content')
 
