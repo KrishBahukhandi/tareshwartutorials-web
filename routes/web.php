@@ -6,11 +6,13 @@ use App\Http\Controllers\Admin\ResourceController as AdminResourceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TeacherController;
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\PasswordChangeController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Public\ResourceController as PublicResourceController;
+use App\Http\Controllers\PublicController;
+use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\EnrollmentController;
-use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Teacher\BatchController as TeacherBatchController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
 use App\Http\Controllers\Teacher\LectureController;
@@ -19,7 +21,6 @@ use App\Http\Controllers\Teacher\NoteController;
 use App\Http\Controllers\Teacher\ResourceController as TeacherResourceController;
 use App\Http\Controllers\Teacher\ScheduleController as TeacherScheduleController;
 use App\Http\Controllers\Teacher\SettingsController as TeacherSettingsController;
-use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public ───────────────────────────────────────────────────────────────────
@@ -37,11 +38,16 @@ Route::get('/pyqs', [PublicResourceController::class, 'pyqs'])->name('pyqs.index
 Route::get('/notes/{freeResource}', [PublicResourceController::class, 'show'])->name('notes.show');
 Route::get('/notes/{freeResource}/download', [PublicResourceController::class, 'download'])->name('notes.download');
 
-
 // Auth — Login
 Route::get('/login', [LoginController::class, 'showForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login'])->name('login.attempt');
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Auth — Forced Password Change (first login after admin onboarding)
+Route::middleware('auth')->group(function () {
+    Route::get('/change-password', [PasswordChangeController::class, 'show'])->name('password.change');
+    Route::put('/change-password', [PasswordChangeController::class, 'update'])->name('password.change.update');
+});
 
 // Auth — Student Registration
 Route::get('/register', [RegisterController::class, 'showStep1'])->name('register');
@@ -49,13 +55,13 @@ Route::post('/register', [RegisterController::class, 'storeStep1'])->name('regis
 Route::get('/register/academic', [RegisterController::class, 'showStep2'])->name('register.step2');
 Route::post('/register/academic', [RegisterController::class, 'storeStep2'])->name('register.step2.store');
 
-
 // ─── Admin ────────────────────────────────────────────────────────────────────
 Route::prefix('admin')
     ->name('admin.')
     ->middleware(['auth', 'role:admin'])
     ->group(function () {
         Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('activity', [DashboardController::class, 'activity'])->name('activity');
 
         // Teachers
         Route::get('teachers', [TeacherController::class, 'index'])->name('teachers.index');
@@ -101,7 +107,7 @@ Route::prefix('teacher')
     ->middleware(['auth', 'role:teacher'])
     ->group(function () {
         Route::get('/', [TeacherDashboardController::class, 'index'])->name('dashboard');
-        
+
         // Settings, Schedule, Resources
         Route::get('resources', [TeacherResourceController::class, 'index'])->name('resources');
         Route::post('resources', [TeacherResourceController::class, 'store'])->name('resources.store');

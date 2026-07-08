@@ -30,6 +30,7 @@
                 <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Class</th>
                 <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Subject</th>
                 <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Views</th>
+                <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Downloads</th>
                 <th class="px-5 py-3 text-left text-xs font-semibold text-gray-500 uppercase">Status</th>
                 <th class="px-5 py-3 text-right text-xs font-semibold text-gray-500 uppercase">Actions</th>
             </tr>
@@ -51,6 +52,7 @@
                     </td>
                     <td class="px-5 py-3.5 text-gray-600">Class {{ $resource->class_level }}</td>
                     <td class="px-5 py-3.5 text-gray-600">{{ $resource->subject }}</td>
+                    <td class="px-5 py-3.5 text-gray-600">{{ number_format($resource->view_count) }}</td>
                     <td class="px-5 py-3.5 text-gray-600">{{ number_format($resource->download_count) }}</td>
                     <td class="px-5 py-3.5">
                         <form method="POST" action="{{ route('admin.resources.toggle', $resource) }}">
@@ -77,7 +79,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="px-5 py-12 text-center text-gray-400 text-sm">
+                    <td colspan="8" class="px-5 py-12 text-center text-gray-400 text-sm">
                         No resources uploaded yet.
                         <a href="{{ route('admin.resources.create') }}" class="text-[#1e3a5f] font-semibold hover:underline">Upload your first one →</a>
                     </td>

@@ -7,7 +7,6 @@ use App\Http\Requests\Admin\StoreTeacherRequest;
 use App\Models\ActivityLog;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
-use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 
 class TeacherController extends Controller
@@ -38,10 +37,11 @@ class TeacherController extends Controller
             ...$data,
             'role' => 'teacher',
             'is_active' => true,
+            'must_change_password' => true,
         ]);
 
         ActivityLog::create([
-            'description' => "<strong>{$teacher->name}</strong> was registered as {$teacher->subject} Teacher.",
+            'description' => '<strong>'.e($teacher->name).'</strong> was registered as '.e($teacher->subject).' Teacher.',
             'icon' => 'user-plus',
             'color' => 'blue',
         ]);
@@ -52,12 +52,14 @@ class TeacherController extends Controller
 
     public function toggle(User $teacher): RedirectResponse
     {
+        abort_unless($teacher->isTeacher(), 404);
+
         $teacher->update(['is_active' => ! $teacher->is_active]);
 
         $status = $teacher->is_active ? 'enabled' : 'disabled';
 
         ActivityLog::create([
-            'description' => "Teacher <strong>{$teacher->name}</strong> account has been {$status}.",
+            'description' => 'Teacher <strong>'.e($teacher->name).'</strong> account has been '.$status.'.',
             'icon' => 'toggle',
             'color' => $teacher->is_active ? 'green' : 'red',
         ]);

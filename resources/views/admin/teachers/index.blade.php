@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Teachers')
-@section('search_placeholder', 'Search teachers...')
 
 @section('content')
 <div class="p-6">

@@ -27,7 +27,19 @@ class LoginController extends Controller
         ]);
 
         if (Auth::attempt($credentials, $request->boolean('remember'))) {
+            if (! Auth::user()->is_active) {
+                Auth::logout();
+
+                return back()->withErrors([
+                    'email' => 'Your account has been disabled. Please contact the administrator.',
+                ])->onlyInput('email');
+            }
+
             $request->session()->regenerate();
+
+            if (Auth::user()->must_change_password) {
+                return redirect()->route('password.change');
+            }
 
             return $this->redirectByRole();
         }

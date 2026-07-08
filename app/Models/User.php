@@ -4,7 +4,11 @@ namespace App\Models;
 
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -16,6 +20,7 @@ use Illuminate\Notifications\Notifiable;
     'phone',
     'profile_photo',
     'is_active',
+    'must_change_password',
     'department',
     'subject',
     'highest_degree',
@@ -41,6 +46,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_active' => 'boolean',
+            'must_change_password' => 'boolean',
         ];
     }
 
@@ -60,25 +66,25 @@ class User extends Authenticatable
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<Batch, $this>
+     * @return BelongsToMany<Batch, $this>
      */
-    public function batches(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function batches(): BelongsToMany
     {
         return $this->belongsToMany(Batch::class, 'batch_subjects', 'teacher_id', 'batch_id')->distinct();
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Enrollment, $this>
+     * @return HasMany<Enrollment, $this>
      */
-    public function enrollments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class, 'student_id');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough<Batch, Enrollment, $this>
+     * @return HasManyThrough<Batch, Enrollment, $this>
      */
-    public function enrolledBatches(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    public function enrolledBatches(): HasManyThrough
     {
         return $this->hasManyThrough(
             Batch::class,
@@ -98,11 +104,11 @@ class User extends Authenticatable
             ->exists();
     }
 
-    public function getEnrolledBatches(): \Illuminate\Database\Eloquent\Collection
+    public function getEnrolledBatches(): Collection
     {
         return $this->enrolledBatches()
             ->where('enrollments.status', 'active')
-            ->with('teacher')
+            ->with('teachers')
             ->orderBy('enrollments.enrollment_date', 'desc')
             ->get();
     }
