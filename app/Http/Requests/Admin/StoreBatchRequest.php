@@ -26,10 +26,8 @@ class StoreBatchRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'subjects' => ['required', 'array', 'min:1'],
-            'subjects.*' => ['string', 'max:100'],
             'grade' => ['required', 'string', 'max:50'],
             'schedule_days' => ['required', 'array', 'min:1'],
             'schedule_days.*' => ['string', 'in:MON,TUE,WED,THU,FRI,SAT'],
@@ -37,7 +35,14 @@ class StoreBatchRequest extends FormRequest
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'student_limit' => ['required', 'integer', 'min:1', 'max:500'],
             'price' => ['nullable', 'numeric', 'min:0'],
-            'teacher_id' => ['nullable', 'exists:users,id'],
+            'is_active' => ['sometimes', 'boolean'],
         ];
+
+        if ($this->isMethod('post')) {
+            $rules['subjects'] = ['required', 'array', 'min:1'];
+            $rules['subjects.*'] = ['string', 'max:100'];
+        }
+
+        return $rules;
     }
 }

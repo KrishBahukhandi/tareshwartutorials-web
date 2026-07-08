@@ -14,7 +14,7 @@ class ResourceController extends Controller
     public function index(Request $request): View
     {
         $classLevel = $request->query('class', '10');
-        $subject    = $request->query('subject');
+        $subject = $request->query('subject');
 
         $query = FreeResource::published()
             ->where('class_level', $classLevel)
@@ -25,9 +25,9 @@ class ResourceController extends Controller
             $query->where('subject', $subject);
         }
 
-        $resources  = $query->get();
-        $taxonomy   = FreeResource::ncertSubjectsByClass();
-        $subjects   = FreeResource::subjectsForClass($classLevel);
+        $resources = $query->get();
+        $taxonomy = FreeResource::ncertSubjectsByClass();
+        $subjects = FreeResource::subjectsForClass($classLevel);
 
         return view('public.resources.index', compact(
             'resources', 'taxonomy', 'classLevel', 'subject', 'subjects'
@@ -38,9 +38,9 @@ class ResourceController extends Controller
     public function pyqs(Request $request): View
     {
         $classLevel = $request->query('class', '10');
-        
+
         // Ensure only class 10 and 12 are valid for PYQs based on user request
-        if (!in_array($classLevel, ['10', '12'])) {
+        if (! in_array($classLevel, ['10', '12'])) {
             $classLevel = '10';
         }
 
@@ -60,8 +60,8 @@ class ResourceController extends Controller
     public function assignments(Request $request): View
     {
         $classLevel = $request->query('class', '10');
-        
-        if (!in_array($classLevel, ['10', '12'])) {
+
+        if (! in_array($classLevel, ['10', '12'])) {
             $classLevel = '10';
         }
 
@@ -78,10 +78,14 @@ class ResourceController extends Controller
     /** View a single resource — inline PDF viewer. */
     public function show(FreeResource $freeResource): View
     {
-        abort_unless($freeResource->is_published, 404);
+        $isAdminPreview = auth()->check() && auth()->user()->isAdmin();
 
-        // Increment download/view count
-        $freeResource->increment('download_count');
+        abort_unless($freeResource->is_published || $isAdminPreview, 404);
+
+        // Increment the view count for real public views only, not admin previews.
+        if ($freeResource->is_published) {
+            $freeResource->increment('view_count');
+        }
 
         $related = FreeResource::published()
             ->where('class_level', $freeResource->class_level)

@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Academic Batches')
-@section('search_placeholder', 'Global search...')
 
 @section('content')
 <div class="p-6">
@@ -104,11 +103,32 @@
         <div class="grid grid-cols-3 gap-4">
             @foreach($batches as $batch)
                 <div class="bg-white rounded-xl border border-gray-100 shadow-sm hover:shadow-md transition-shadow p-5">
+                    @php
+                        $editPayload = [
+                            'id' => $batch->id,
+                            'name' => $batch->name,
+                            'grade' => $batch->grade,
+                            'student_limit' => $batch->student_limit,
+                            'start_time' => substr($batch->start_time, 0, 5),
+                            'end_time' => substr($batch->end_time, 0, 5),
+                            'schedule_days' => $batch->schedule_days ?? [],
+                            'is_active' => $batch->is_active,
+                        ];
+                    @endphp
                     <div class="flex items-start justify-between mb-3">
                         <span class="text-[11px] font-bold text-blue-600 bg-blue-50 px-2.5 py-1 rounded-full uppercase tracking-wide">
                             {{ $batch->grade }} • {{ implode(', ', $batch->subjects->pluck('name')->toArray()) }}
                         </span>
                         <div class="flex items-center gap-1.5">
+                            <button type="button"
+                                    class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-50 transition-colors text-gray-500 hover:text-[#1e3a5f]"
+                                    title="Edit Batch"
+                                    onclick='openEditModal({!! json_encode($editPayload, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_AMP | JSON_HEX_QUOT) !!})'>
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                                </svg>
+                            </button>
                             <a href="{{ route('admin.batches.show', $batch) }}"
                                class="w-7 h-7 flex items-center justify-center rounded-lg hover:bg-gray-50 transition-colors text-gray-500 hover:text-[#1e3a5f]" title="Manage Subjects & Teachers">
                                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -175,13 +195,15 @@
                     </div>
 
                     <div class="mt-4 pt-4 border-t border-gray-100">
-                        <p class="text-[11px] text-gray-400 font-medium mb-2">Enrollment</p>
-                        <div class="flex items-center gap-1.5">
-                            <div class="flex -space-x-1.5">
-                                <div class="w-6 h-6 rounded-full bg-gray-200 border-2 border-white"></div>
-                                <div class="w-6 h-6 rounded-full bg-gray-300 border-2 border-white"></div>
-                            </div>
-                            <span class="text-xs text-gray-400">0 / {{ $batch->student_limit }}</span>
+                        <div class="flex items-center justify-between mb-1.5">
+                            <p class="text-[11px] text-gray-400 font-medium">Enrollment</p>
+                            <span class="text-xs font-semibold {{ $batch->isFull() ? 'text-orange-600' : 'text-gray-600' }}">
+                                {{ $batch->enrollmentCount() }} / {{ $batch->student_limit }}
+                            </span>
+                        </div>
+                        <div class="h-1.5 bg-gray-100 rounded-full overflow-hidden">
+                            <div class="h-full {{ $batch->isFull() ? 'bg-orange-400' : 'bg-[#1e3a5f]' }} rounded-full"
+                                 style="width: {{ $batch->student_limit > 0 ? min(100, round($batch->enrollmentCount() / $batch->student_limit * 100)) : 0 }}%"></div>
                         </div>
                     </div>
                 </div>
@@ -245,6 +267,7 @@
                         <select name="grade"
                                 class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 bg-white appearance-none cursor-pointer pr-8 transition">
                             <option value="">Select Class</option>
+                            <option value="Class 8">Class 8</option>
                             <option value="Class 9">Class 9</option>
                             <option value="Class 10">Class 10</option>
                             <option value="Class 11">Class 11</option>
@@ -320,6 +343,132 @@
 
     </div>
 </div>
+
+{{-- ===== EDIT BATCH MODAL ===== --}}
+<div id="edit-batch-modal"
+     class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+
+    {{-- Backdrop --}}
+    <div id="edit-modal-backdrop"
+         class="absolute inset-0 bg-[#1e3a5f]/40 backdrop-blur-sm transition-opacity duration-200"></div>
+
+    {{-- Modal Panel --}}
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-lg z-10 transform transition-all duration-200">
+
+        {{-- Modal Header --}}
+        <div class="px-6 pt-6 pb-4 border-b border-gray-100">
+            <div class="flex items-start justify-between">
+                <div>
+                    <h3 class="text-lg font-bold text-gray-900">Edit Batch</h3>
+                    <p class="text-sm text-gray-500 mt-0.5">Update this batch's schedule and capacity.</p>
+                </div>
+                <button id="close-edit-modal-btn"
+                        class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors text-gray-500 hover:text-gray-700 shrink-0">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        {{-- Modal Form --}}
+        <form method="POST" id="edit-batch-form">
+            @csrf
+            @method('PUT')
+            <input type="hidden" name="_editing_batch_id" id="edit-batch-id" value="{{ old('_editing_batch_id') }}">
+            <div class="px-6 py-5 space-y-4">
+
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Batch Name</label>
+                    <input type="text" name="name" id="edit-name" required
+                           class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                </div>
+
+                {{-- Grade --}}
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Class</label>
+                    <div class="relative">
+                        <select name="grade" id="edit-grade"
+                                class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 bg-white appearance-none cursor-pointer pr-8 transition">
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="Class 11">Class 11</option>
+                            <option value="Class 12">Class 12</option>
+                        </select>
+                        <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
+                            <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                {{-- Student Limit --}}
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Student Limit</label>
+                    <input type="number" name="student_limit" id="edit-student-limit" min="1" max="500"
+                           class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                </div>
+
+                {{-- Class Schedule Days --}}
+                <div>
+                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-2">Class Schedule</label>
+                    <div class="flex items-center gap-2 flex-wrap">
+                        @foreach(['MON','TUE','WED','THU','FRI','SAT'] as $day)
+                            <label class="cursor-pointer">
+                                <input type="checkbox" name="schedule_days[]" value="{{ $day }}" class="sr-only peer edit-day-checkbox" data-day="{{ $day }}">
+                                <span class="inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg border border-gray-200 text-gray-600
+                                             peer-checked:bg-[#1e3a5f] peer-checked:text-white peer-checked:border-[#1e3a5f]
+                                             hover:border-[#1e3a5f]/40 transition-all duration-150 select-none">
+                                    {{ $day }}
+                                </span>
+                            </label>
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- Start/End Time --}}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Start Time</label>
+                        <input type="time" name="start_time" id="edit-start-time"
+                               class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">End Time</label>
+                        <input type="time" name="end_time" id="edit-end-time"
+                               class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                    </div>
+                </div>
+
+                {{-- Active toggle --}}
+                <div class="flex items-center gap-2">
+                    <input type="hidden" name="is_active" value="0">
+                    <input type="checkbox" id="edit-is-active" name="is_active" value="1"
+                           class="w-4 h-4 rounded border-gray-300 text-[#1e3a5f] focus:ring-[#1e3a5f]/20 cursor-pointer">
+                    <label for="edit-is-active" class="text-sm text-gray-600 cursor-pointer">
+                        Batch is active (accepting enrollments)
+                    </label>
+                </div>
+
+            </div>
+
+            {{-- Modal Footer --}}
+            <div class="px-6 py-4 bg-gray-50/70 rounded-b-2xl border-t border-gray-100 flex items-center justify-end gap-3">
+                <button type="button" id="discard-edit-btn"
+                        class="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors">
+                    Discard
+                </button>
+                <button type="submit"
+                        class="px-6 py-2.5 bg-[#1e3a5f] text-white text-sm font-semibold rounded-lg hover:bg-[#162d4a] transition-colors shadow-sm">
+                    Save Changes
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
 @endsection
 
 @push('scripts')
@@ -350,9 +499,59 @@
         openModal();
     }
 
-    // Reopen if validation failed (form was submitted with errors)
-    @if($errors->any())
+    // Reopen if validation failed (form was submitted with errors) — but only for
+    // the create modal, not when the failed submission came from the edit modal.
+    @if($errors->any() && ! old('_editing_batch_id'))
         openModal();
+    @endif
+
+    // ─── Edit Batch Modal ────────────────────────────────────────────────────
+    const editModal = document.getElementById('edit-batch-modal');
+    const editForm = document.getElementById('edit-batch-form');
+    const closeEditBtn = document.getElementById('close-edit-modal-btn');
+    const discardEditBtn = document.getElementById('discard-edit-btn');
+    const editBackdrop = document.getElementById('edit-modal-backdrop');
+    const editFormActionTemplate = @json(route('admin.batches.update', ['batch' => '__ID__']));
+
+    function openEditModal(batch) {
+        editForm.action = editFormActionTemplate.replace('__ID__', batch.id);
+        document.getElementById('edit-batch-id').value = batch.id;
+        document.getElementById('edit-name').value = batch.name;
+        document.getElementById('edit-grade').value = batch.grade;
+        document.getElementById('edit-student-limit').value = batch.student_limit;
+        document.getElementById('edit-start-time').value = batch.start_time;
+        document.getElementById('edit-end-time').value = batch.end_time;
+        document.getElementById('edit-is-active').checked = batch.is_active;
+
+        document.querySelectorAll('.edit-day-checkbox').forEach(function (checkbox) {
+            checkbox.checked = batch.schedule_days.includes(checkbox.dataset.day);
+        });
+
+        editModal.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeEditModal() {
+        editModal.classList.add('hidden');
+        document.body.style.overflow = '';
+    }
+
+    closeEditBtn.addEventListener('click', closeEditModal);
+    discardEditBtn.addEventListener('click', closeEditModal);
+    editBackdrop.addEventListener('click', closeEditModal);
+
+    // Reopen the edit modal with the submitted values if that's what failed validation.
+    @if($errors->any() && old('_editing_batch_id'))
+        openEditModal({
+            id: {{ (int) old('_editing_batch_id') }},
+            name: @json(old('name')),
+            grade: @json(old('grade')),
+            student_limit: @json(old('student_limit')),
+            start_time: @json(old('start_time')),
+            end_time: @json(old('end_time')),
+            schedule_days: @json(old('schedule_days', [])),
+            is_active: {{ old('is_active') ? 'true' : 'false' }},
+        });
     @endif
 </script>
 @endpush

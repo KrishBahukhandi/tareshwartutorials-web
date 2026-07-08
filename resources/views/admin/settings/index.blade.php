@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Administrator Settings')
-@section('search_placeholder', 'Search settings or tools...')
 
 @section('content')
 <div class="p-6">
@@ -13,50 +12,40 @@
 
     <div class="flex gap-5">
 
-        {{-- Left Tab Navigation --}}
+        {{-- Left Section Navigation --}}
         <div class="w-52 shrink-0">
-            <nav class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden">
+            <nav class="bg-white rounded-xl border border-gray-100 shadow-sm overflow-hidden sticky top-6">
                 @php
-                    $tabs = [
+                    $sections = [
                         ['id' => 'general', 'label' => 'General', 'icon' => 'settings'],
                         ['id' => 'profile', 'label' => 'Profile', 'icon' => 'user-circle'],
                         ['id' => 'security', 'label' => 'Security', 'icon' => 'shield'],
-                        ['id' => 'notifications', 'label' => 'Notifications', 'icon' => 'bell'],
                     ];
-                    $activeTab = request('tab', 'general');
                 @endphp
 
-                @foreach($tabs as $tab)
-                    <a href="{{ route('admin.settings') }}?tab={{ $tab['id'] }}"
-                       class="flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-colors border-b border-gray-50 last:border-0
-                              {{ $activeTab === $tab['id']
-                                  ? 'bg-[#1e3a5f]/5 text-[#1e3a5f] border-l-2 border-l-[#1e3a5f]'
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900' }}">
+                @foreach($sections as $section)
+                    <a href="#{{ $section['id'] }}"
+                       class="flex items-center gap-3 px-4 py-3.5 text-sm font-medium transition-colors border-b border-gray-50 last:border-0 text-gray-600 hover:bg-gray-50 hover:text-gray-900">
 
-                        @if($tab['icon'] === 'settings')
+                        @if($section['icon'] === 'settings')
                             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/>
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
                             </svg>
-                        @elseif($tab['icon'] === 'user-circle')
+                        @elseif($section['icon'] === 'user-circle')
                             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M5.121 17.804A13.937 13.937 0 0112 16c2.5 0 4.847.655 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0zm6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
                             </svg>
-                        @elseif($tab['icon'] === 'shield')
+                        @else
                             <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                             </svg>
-                        @else
-                            <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-                            </svg>
                         @endif
 
-                        {{ $tab['label'] }}
+                        {{ $section['label'] }}
                     </a>
                 @endforeach
             </nav>
@@ -67,10 +56,9 @@
             <form method="POST" action="{{ route('admin.settings.update') }}" enctype="multipart/form-data" id="settings-form">
                 @csrf
                 @method('PUT')
-                <input type="hidden" name="tab" value="{{ $activeTab }}">
 
                 {{-- Profile Card --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-4 flex items-center gap-5">
+                <div id="profile" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-4 flex items-center gap-5 scroll-mt-6">
                     <div class="relative shrink-0">
                         <img src="{{ $admin->profilePhotoUrl() }}"
                              alt="{{ $admin->name }}"
@@ -103,7 +91,7 @@
                 </div>
 
                 {{-- General Settings --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-4">
+                <div id="general" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-4 scroll-mt-6">
                     <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -115,46 +103,36 @@
                     <div class="space-y-4">
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">School Name</label>
-                            <input type="text" name="school_name" value="{{ old('school_name', config('app.school_name', 'Global Academy of Excellence')) }}"
+                            <input type="text" name="school_name" value="{{ old('school_name', $schoolName) }}"
                                    class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
                         </div>
 
                         <div>
                             <label class="block text-xs font-semibold text-gray-600 mb-1.5">Institution Branding Logo</label>
+                            @if($schoolLogoUrl)
+                                <div class="flex items-center gap-4 mb-3">
+                                    <img src="{{ $schoolLogoUrl }}" alt="School logo" class="h-16 w-auto rounded-lg border border-gray-200 bg-gray-50 object-contain p-2">
+                                    <p class="text-xs text-gray-500">Current logo. Upload a new file below to replace it.</p>
+                                </div>
+                            @endif
                             <label for="logo_upload"
                                    class="flex flex-col items-center justify-center w-full h-28 border-2 border-dashed border-gray-300 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
                                 <svg class="w-8 h-8 text-gray-400 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
                                         d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"/>
                                 </svg>
-                                <p class="text-sm font-medium text-gray-600">Click to upload or drag and drop</p>
-                                <p class="text-xs text-gray-400 mt-0.5">SVG, PNG, or JPG (max. 800×400px)</p>
-                                <input type="file" id="logo_upload" name="logo" class="hidden" accept=".svg,.png,.jpg">
+                                <p class="text-sm font-medium text-gray-600" id="logo-upload-label">Click to upload or drag and drop</p>
+                                <p class="text-xs text-gray-400 mt-0.5">SVG, PNG, or JPG (max. 2MB)</p>
+                                <input type="file" id="logo_upload" name="logo" class="hidden" accept=".svg,.png,.jpg,.jpeg"
+                                       onchange="document.getElementById('logo-upload-label').textContent = this.files[0]?.name ?? 'Click to upload or drag and drop'">
                             </label>
-                        </div>
-
-                        <div>
-                            <label class="block text-xs font-semibold text-gray-600 mb-1.5">Primary Language</label>
-                            <div class="relative">
-                                <select name="language"
-                                        class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 bg-white appearance-none cursor-pointer pr-8">
-                                    <option value="en-GB">English (United Kingdom)</option>
-                                    <option value="en-US">English (United States)</option>
-                                    <option value="hi">Hindi</option>
-                                    <option value="ar">Arabic</option>
-                                </select>
-                                <div class="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2">
-                                    <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
-                                    </svg>
-                                </div>
-                            </div>
+                            @error('logo')<p class="text-xs text-red-500 mt-1">{{ $message }}</p>@enderror
                         </div>
                     </div>
                 </div>
 
                 {{-- Security & Access --}}
-                <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-4">
+                <div id="security" class="bg-white rounded-xl border border-gray-100 shadow-sm p-5 mb-4 scroll-mt-6">
                     <h3 class="text-sm font-bold text-gray-900 mb-4 flex items-center gap-2">
                         <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -162,22 +140,6 @@
                         </svg>
                         Security & Access
                     </h3>
-
-                    {{-- 2FA Toggle --}}
-                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl mb-4">
-                        <div>
-                            <p class="text-sm font-semibold text-gray-800">Two-Factor Authentication (2FA)</p>
-                            <p class="text-xs text-gray-500 mt-0.5">Add an extra layer of security to your account.</p>
-                        </div>
-                        <label class="relative inline-flex items-center cursor-pointer">
-                            <input type="checkbox" name="two_factor_enabled" value="1" class="sr-only peer" checked>
-                            <div class="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-blue-300 rounded-full peer
-                                        peer-checked:after:translate-x-full peer-checked:after:border-white
-                                        after:content-[''] after:absolute after:top-[2px] after:left-[2px]
-                                        after:bg-white after:border-gray-300 after:border after:rounded-full
-                                        after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
-                        </label>
-                    </div>
 
                     {{-- Change Password --}}
                     <div class="border border-gray-200 rounded-xl p-4 space-y-3">
@@ -209,11 +171,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                         </svg>
-                        @if(session('success'))
-                            Last saved just now
-                        @else
-                            Last saved 4 minutes ago
-                        @endif
+                        Last saved {{ $admin->updated_at->diffForHumans() }}
                     </div>
                     <div class="flex items-center gap-3">
                         <a href="{{ route('admin.settings') }}"

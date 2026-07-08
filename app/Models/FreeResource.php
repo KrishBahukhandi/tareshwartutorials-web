@@ -21,6 +21,7 @@ class FreeResource extends Model
         'file_path',
         'thumbnail',
         'download_count',
+        'view_count',
         'is_published',
     ];
 
@@ -29,6 +30,7 @@ class FreeResource extends Model
         return [
             'is_published' => 'boolean',
             'download_count' => 'integer',
+            'view_count' => 'integer',
             'year' => 'integer',
         ];
     }
@@ -42,21 +44,21 @@ class FreeResource extends Model
     {
         return [
             '10' => [
-                'Science & Maths'   => ['Mathematics', 'Science'],
-                'Social Science'    => ['History', 'Geography', 'Political Science', 'Economics'],
-                'Languages'         => ['English', 'Hindi', 'Sanskrit'],
+                'Science & Maths' => ['Mathematics', 'Science'],
+                'Social Science' => ['History', 'Geography', 'Political Science', 'Economics'],
+                'Languages' => ['English', 'Hindi', 'Sanskrit'],
             ],
             '11' => [
-                'Science'           => ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
-                'Commerce'          => ['Business Studies', 'Accountancy', 'Economics'],
-                'Humanities'        => ['History', 'Geography', 'Political Science'],
-                'Languages'         => ['English', 'Hindi'],
+                'Science' => ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
+                'Commerce' => ['Business Studies', 'Accountancy', 'Economics'],
+                'Humanities' => ['History', 'Geography', 'Political Science'],
+                'Languages' => ['English', 'Hindi'],
             ],
             '12' => [
-                'Science'           => ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
-                'Commerce'          => ['Business Studies', 'Accountancy', 'Economics'],
-                'Humanities'        => ['History', 'Geography', 'Political Science'],
-                'Languages'         => ['English', 'Hindi'],
+                'Science' => ['Physics', 'Chemistry', 'Mathematics', 'Biology'],
+                'Commerce' => ['Business Studies', 'Accountancy', 'Economics'],
+                'Humanities' => ['History', 'Geography', 'Political Science'],
+                'Languages' => ['English', 'Hindi'],
             ],
         ];
     }

@@ -2,11 +2,17 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class Batch extends Model
 {
-    use \Illuminate\Database\Eloquent\Factories\HasFactory;
+    use HasFactory;
 
     protected $fillable = [
         'name',
@@ -15,7 +21,6 @@ class Batch extends Model
         'start_time',
         'end_time',
         'student_limit',
-        'teacher_id',
         'is_active',
         'meeting_link',
         'meeting_title',
@@ -34,21 +39,21 @@ class Batch extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BatchSubject, $this>
+     * @return HasMany<BatchSubject, $this>
      */
-    public function subjects(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function subjects(): HasMany
     {
         return $this->hasMany(BatchSubject::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany<User, $this>
+     * @return BelongsToMany<User, $this>
      */
-    public function teachers(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function teachers(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'batch_subjects', 'batch_id', 'teacher_id')
-                    ->withPivot('name')
-                    ->distinct();
+            ->withPivot('name')
+            ->distinct();
     }
 
     public function hasTeacher(int $userId): bool
@@ -57,38 +62,38 @@ class Batch extends Model
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Lecture, $this>
+     * @return HasMany<Lecture, $this>
      */
-    public function lectures(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function lectures(): HasMany
     {
         return $this->hasMany(Lecture::class)->orderBy('created_at', 'desc');
     }
 
-    public function assignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function assignments(): HasMany
     {
         return $this->hasMany(Assignment::class)->orderBy('created_at', 'desc');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<BatchNote, $this>
+     * @return HasMany<BatchNote, $this>
      */
-    public function batchNotes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function batchNotes(): HasMany
     {
         return $this->hasMany(BatchNote::class)->orderBy('created_at', 'desc');
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany<Enrollment, $this>
+     * @return HasMany<Enrollment, $this>
      */
-    public function enrollments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function enrollments(): HasMany
     {
         return $this->hasMany(Enrollment::class);
     }
 
     /**
-     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough<User, Enrollment, $this>
+     * @return HasManyThrough<User, Enrollment, $this>
      */
-    public function students(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
+    public function students(): HasManyThrough
     {
         return $this->hasManyThrough(
             User::class,
@@ -100,12 +105,12 @@ class Batch extends Model
         )->where('enrollments.status', 'active');
     }
 
-    public function scopeActive(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeActive(Builder $query): Builder
     {
         return $query->where('is_active', true);
     }
 
-    public function scopeWithEnrollmentCount(\Illuminate\Database\Eloquent\Builder $query): \Illuminate\Database\Eloquent\Builder
+    public function scopeWithEnrollmentCount(Builder $query): Builder
     {
         return $query->withCount([
             'enrollments as active_enrollments_count' => fn ($query) => $query->where('status', 'active'),
@@ -149,7 +154,7 @@ class Batch extends Model
         ];
 
         $formatted = array_map(fn ($d) => $dayMap[$d] ?? $d, $days);
-        $timeStart = \Carbon\Carbon::parse($this->start_time)->format('g:i A');
+        $timeStart = Carbon::parse($this->start_time)->format('g:i A');
 
         return implode(', ', $formatted).' • '.$timeStart;
     }
@@ -157,20 +162,20 @@ class Batch extends Model
     /**
      * Get the next scheduled class Carbon instance.
      */
-    public function nextClassAt(): ?\Carbon\Carbon
+    public function nextClassAt(): ?Carbon
     {
         if (empty($this->schedule_days)) {
             return null;
         }
 
         $dayMap = ['SUN' => 0, 'MON' => 1, 'TUE' => 2, 'WED' => 3, 'THU' => 4, 'FRI' => 5, 'SAT' => 6];
-        $startTime = \Carbon\Carbon::parse($this->start_time);
+        $startTime = Carbon::parse($this->start_time);
         $scheduledDays = array_filter(
             array_map(fn ($d) => $dayMap[$d] ?? null, $this->schedule_days),
             fn ($d) => $d !== null
         );
 
-        $now = \Carbon\Carbon::now();
+        $now = Carbon::now();
 
         for ($i = 0; $i <= 7; $i++) {
             $candidate = $now->copy()->addDays($i)->setTime($startTime->hour, $startTime->minute, 0);

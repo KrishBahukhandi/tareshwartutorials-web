@@ -1,7 +1,6 @@
 @extends('layouts.admin')
 
 @section('title', 'Teacher Onboarding')
-@section('search_placeholder', 'Search portal...')
 
 @section('content')
 <div class="p-6 max-w-4xl">
