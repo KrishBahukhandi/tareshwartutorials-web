@@ -24,7 +24,10 @@
     <div class="bg-white rounded-xl border border-gray-100 shadow-sm p-6">
         <div class="mb-6">
             <h2 class="text-xl font-bold text-gray-900">{{ $batch->name }}</h2>
-            <p class="text-sm text-gray-500 mt-1">Class: {{ $batch->grade }} • Schedule: {{ $batch->formattedSchedule() }}</p>
+            <p class="text-sm text-gray-500 mt-1">
+                Class: {{ $batch->grade }} • Schedule: {{ $batch->formattedSchedule() }} •
+                Price: {{ $batch->price > 0 ? '₹'.number_format($batch->price, 2) : 'Free' }}
+            </p>
         </div>
 
         <h3 class="text-sm font-bold text-gray-700 uppercase tracking-wide mb-4">Subjects & Faculty</h3>

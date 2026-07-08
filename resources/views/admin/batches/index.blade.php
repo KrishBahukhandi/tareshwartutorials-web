@@ -109,6 +109,7 @@
                             'name' => $batch->name,
                             'grade' => $batch->grade,
                             'student_limit' => $batch->student_limit,
+                            'price' => (string) $batch->price,
                             'start_time' => substr($batch->start_time, 0, 5),
                             'end_time' => substr($batch->end_time, 0, 5),
                             'schedule_days' => $batch->schedule_days ?? [],
@@ -164,6 +165,21 @@
                             <div>
                                 <p class="text-[11px] text-gray-400 font-medium">Schedule</p>
                                 <p class="text-xs font-semibold text-gray-700">{{ $batch->formattedSchedule() }}</p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-start gap-2.5">
+                            <div class="w-5 h-5 flex items-center justify-center shrink-0 mt-0.5">
+                                <svg class="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V6m0 10v2m0-2c-1.11 0-2.08-.402-2.599-1"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <p class="text-[11px] text-gray-400 font-medium">Price</p>
+                                <p class="text-xs font-semibold text-gray-700">
+                                    {{ $batch->price > 0 ? '₹'.number_format($batch->price, 2) : 'Free' }}
+                                </p>
                             </div>
                         </div>
 
@@ -404,11 +420,18 @@
                     </div>
                 </div>
 
-                {{-- Student Limit --}}
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Student Limit</label>
-                    <input type="number" name="student_limit" id="edit-student-limit" min="1" max="500"
-                           class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                {{-- Student Limit & Price --}}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Student Limit</label>
+                        <input type="number" name="student_limit" id="edit-student-limit" min="1" max="500"
+                               class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Price (₹)</label>
+                        <input type="number" name="price" id="edit-price" min="0" step="0.01"
+                               class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                    </div>
                 </div>
 
                 {{-- Class Schedule Days --}}
@@ -519,6 +542,7 @@
         document.getElementById('edit-name').value = batch.name;
         document.getElementById('edit-grade').value = batch.grade;
         document.getElementById('edit-student-limit').value = batch.student_limit;
+        document.getElementById('edit-price').value = batch.price;
         document.getElementById('edit-start-time').value = batch.start_time;
         document.getElementById('edit-end-time').value = batch.end_time;
         document.getElementById('edit-is-active').checked = batch.is_active;
@@ -547,6 +571,7 @@
             name: @json(old('name')),
             grade: @json(old('grade')),
             student_limit: @json(old('student_limit')),
+            price: @json(old('price')),
             start_time: @json(old('start_time')),
             end_time: @json(old('end_time')),
             schedule_days: @json(old('schedule_days', [])),
