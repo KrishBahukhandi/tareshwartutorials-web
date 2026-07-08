@@ -4,20 +4,9 @@
 
 @section('content')
 <div class="p-6">
-    <div class="flex items-start justify-between mb-6">
-        <div>
-            <h1 class="text-2xl font-bold text-gray-900">Your Schedule</h1>
-            <p class="text-sm text-gray-500 mt-1">View and manage your upcoming classes and meetings.</p>
-        </div>
-        <div class="flex gap-2">
-            <button class="bg-white border border-gray-200 hover:bg-gray-50 text-gray-700 px-4 py-2 rounded-lg text-sm font-medium transition-colors">
-                Today
-            </button>
-            <div class="flex rounded-lg border border-gray-200 overflow-hidden">
-                <button class="bg-gray-100 text-gray-700 px-3 py-2 text-sm font-medium">Day</button>
-                <button class="bg-white hover:bg-gray-50 text-gray-700 px-3 py-2 text-sm font-medium border-l border-gray-200">Week</button>
-            </div>
-        </div>
+    <div class="mb-6">
+        <h1 class="text-2xl font-bold text-gray-900">Your Schedule</h1>
+        <p class="text-sm text-gray-500 mt-1">View and manage your upcoming classes and meetings.</p>
     </div>
 
     @if($batches->isEmpty())
@@ -35,7 +24,7 @@
                 <div class="p-6 hover:bg-gray-50 transition-colors flex items-center justify-between">
                     <div class="flex items-center gap-6">
                         <div class="w-16 h-16 rounded-xl bg-blue-50 flex flex-col items-center justify-center border border-blue-100 shrink-0">
-                            <span class="text-xs font-bold text-blue-600 uppercase">{{ Str::limit($batch->subject, 3, '') }}</span>
+                            <span class="text-xs font-bold text-blue-600 uppercase">{{ Str::limit($batch->subjectNames(), 3, '') }}</span>
                             <span class="text-sm font-black text-[#1e3a5f] mt-0.5">G{{ $batch->grade }}</span>
                         </div>
                         <div>

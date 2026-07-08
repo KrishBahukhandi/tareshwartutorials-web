@@ -29,6 +29,8 @@ use Illuminate\Notifications\Notifiable;
     'class_level',
     'board',
     'stream',
+    'email_notifications',
+    'push_notifications',
 ])]
 class User extends Authenticatable
 {
@@ -47,6 +49,8 @@ class User extends Authenticatable
             'password' => 'hashed',
             'is_active' => 'boolean',
             'must_change_password' => 'boolean',
+            'email_notifications' => 'boolean',
+            'push_notifications' => 'boolean',
         ];
     }
 

@@ -14,10 +14,7 @@
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <div class="text-sm font-medium text-gray-500 mb-1">Total Students</div>
             <div class="text-2xl font-bold text-gray-900">{{ number_format($stats['total_students']) }}</div>
-            <div class="text-xs text-green-600 mt-1 flex items-center">
-                <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/></svg>
-                12% from last month
-            </div>
+            <div class="text-xs text-gray-500 mt-1">Across all your batches</div>
         </div>
         <div class="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
             <div class="text-sm font-medium text-gray-500 mb-1">Active Batches</div>

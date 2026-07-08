@@ -3,22 +3,21 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
-use App\Models\BatchNote;
 use App\Models\Batch;
+use App\Models\BatchNote;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class ResourceController extends Controller
 {
     public function index()
     {
         $user = auth()->user();
-        
+
         $notes = BatchNote::with('batch')
             ->where('teacher_id', $user->id)
             ->orderByDesc('created_at')
             ->get();
-            
+
         $batches = $user->batches()->get();
 
         return view('teacher.resources', compact('notes', 'batches'));
@@ -28,11 +27,11 @@ class ResourceController extends Controller
     {
         $request->validate([
             'batch_id' => 'required|exists:batches,id',
-            'note_file' => 'required|file|max:10240', // 10MB max
+            'note_file' => 'required|file|mimes:pdf,doc,docx,ppt,pptx|max:20480', // 20MB max
         ]);
 
         $batch = Batch::findOrFail($request->batch_id);
-        abort_if(!$batch->hasTeacher(auth()->id()), 403);
+        abort_if(! $batch->hasTeacher(auth()->id()), 403);
 
         $file = $request->file('note_file');
         $originalName = $file->getClientOriginalName();

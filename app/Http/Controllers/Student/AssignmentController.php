@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Student;
 
 use App\Http\Controllers\Controller;
 use App\Models\Assignment;
-use App\Models\AssignmentSubmission;
 use App\Models\Batch;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -13,7 +12,7 @@ class AssignmentController extends Controller
 {
     public function index(Batch $batch)
     {
-        abort_if(!auth()->user()->isEnrolledInBatch($batch), 403);
+        abort_if(! auth()->user()->isEnrolledInBatch($batch), 403);
 
         $assignments = $batch->assignments()
             ->with(['submissions' => function ($query) {
@@ -26,7 +25,7 @@ class AssignmentController extends Controller
 
     public function show(Batch $batch, Assignment $assignment)
     {
-        abort_if(!auth()->user()->isEnrolledInBatch($batch), 403);
+        abort_if(! auth()->user()->isEnrolledInBatch($batch), 403);
         abort_if($assignment->batch_id !== $batch->id, 404);
 
         $submission = $assignment->submissions()->where('student_id', auth()->id())->first();
@@ -36,7 +35,7 @@ class AssignmentController extends Controller
 
     public function submit(Request $request, Batch $batch, Assignment $assignment)
     {
-        abort_if(!auth()->user()->isEnrolledInBatch($batch), 403);
+        abort_if(! auth()->user()->isEnrolledInBatch($batch), 403);
         abort_if($assignment->batch_id !== $batch->id, 404);
         abort_if($assignment->due_date->isPast(), 403, 'The due date for this assignment has passed.');
 
@@ -64,6 +63,8 @@ class AssignmentController extends Controller
                 'submitted_at' => now(),
             ]);
         }
+
+        $batch->recalculateProgressForStudent(auth()->id());
 
         return redirect()->route('student.batches.assignments.show', [$batch, $assignment])
             ->with('success', 'Assignment submitted successfully.');

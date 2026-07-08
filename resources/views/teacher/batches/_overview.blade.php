@@ -8,7 +8,7 @@
             <div class="grid grid-cols-2 gap-4">
                 <div>
                     <p class="text-xs text-gray-400 mb-0.5">Subject</p>
-                    <p class="text-sm font-semibold text-gray-800">{{ $batch->subject }}</p>
+                    <p class="text-sm font-semibold text-gray-800">{{ $batch->subjectNames() }}</p>
                 </div>
                 <div>
                     <p class="text-xs text-gray-400 mb-0.5">Grade</p>

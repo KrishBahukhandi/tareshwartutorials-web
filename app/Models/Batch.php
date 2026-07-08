@@ -61,6 +61,54 @@ class Batch extends Model
         return $this->teachers()->where('users.id', $userId)->exists();
     }
 
+    public function subjectNames(): string
+    {
+        return $this->subjects->pluck('name')->implode(', ');
+    }
+
+    /**
+     * Recompute progress_percentage for one student's enrollment in this
+     * batch, based on assignments submitted out of assignments assigned.
+     */
+    public function recalculateProgressForStudent(int $studentId): void
+    {
+        $enrollment = $this->enrollments()->where('student_id', $studentId)->where('status', 'active')->first();
+
+        if (! $enrollment) {
+            return;
+        }
+
+        $enrollment->update(['progress_percentage' => $this->computeProgressFor($studentId)]);
+    }
+
+    /**
+     * Recompute progress_percentage for every active enrollment in this
+     * batch — used when the number of assignments changes.
+     */
+    public function recalculateAllEnrollmentProgress(): void
+    {
+        $this->enrollments()->active()->get()->each(
+            fn (Enrollment $enrollment) => $enrollment->update([
+                'progress_percentage' => $this->computeProgressFor($enrollment->student_id),
+            ])
+        );
+    }
+
+    protected function computeProgressFor(int $studentId): int
+    {
+        $assignmentIds = $this->assignments()->pluck('id');
+
+        if ($assignmentIds->isEmpty()) {
+            return 0;
+        }
+
+        $submitted = AssignmentSubmission::whereIn('assignment_id', $assignmentIds)
+            ->where('student_id', $studentId)
+            ->count();
+
+        return (int) round($submitted / $assignmentIds->count() * 100);
+    }
+
     /**
      * @return HasMany<Lecture, $this>
      */

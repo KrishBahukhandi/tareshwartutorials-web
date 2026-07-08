@@ -46,8 +46,8 @@
                 </select>
             </div>
             <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Resource File (Max 10MB)</label>
-                <input type="file" name="note_file" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Resource File (PDF, Word, or PowerPoint — Max 20MB)</label>
+                <input type="file" name="note_file" accept=".pdf,.doc,.docx,.ppt,.pptx" required class="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
             </div>
             <div class="flex justify-end gap-2 mt-4">
                 <button type="button" onclick="document.getElementById('uploadForm').classList.add('hidden')" class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 text-sm font-medium rounded-lg">Cancel</button>

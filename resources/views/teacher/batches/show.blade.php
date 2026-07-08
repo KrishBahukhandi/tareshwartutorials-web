@@ -20,23 +20,16 @@
         <div>
             <h1 class="text-2xl font-bold text-gray-900">{{ $batch->name }}</h1>
             <p class="text-sm text-gray-500 mt-0.5">
-                {{ $batch->grade }} • {{ $batch->subject }} • {{ $batch->student_limit }} Student Limit
+                {{ $batch->grade }} • {{ $batch->subjectNames() }} • {{ $batch->student_limit }} Student Limit
             </p>
         </div>
         <div class="flex items-center gap-3">
-            <button class="flex items-center gap-2 px-4 py-2.5 border border-gray-200 text-sm font-semibold text-gray-700 rounded-lg hover:bg-gray-50 transition-colors">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
-                </svg>
-                Edit Details
-            </button>
-            <button class="flex items-center gap-2 px-4 py-2.5 bg-[#1e3a5f] text-white text-sm font-semibold rounded-lg hover:bg-[#162d4a] transition-colors shadow-sm">
+            <button id="open-share-modal" class="flex items-center gap-2 px-4 py-2.5 bg-[#1e3a5f] text-white text-sm font-semibold rounded-lg hover:bg-[#162d4a] transition-colors shadow-sm">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                         d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
                 </svg>
-                Invite Students
+                Share Batch Link
             </button>
         </div>
     </div>
@@ -201,10 +194,66 @@
     </div>
 </div>
 
+{{-- Share Batch Link Modal --}}
+<div id="share-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 hidden">
+    <div class="absolute inset-0 bg-[#1e3a5f]/40 backdrop-blur-sm" id="share-modal-backdrop"></div>
+    <div class="relative bg-white rounded-2xl shadow-2xl w-full max-w-md z-10">
+        <div class="px-6 pt-6 pb-4 border-b border-gray-100 flex items-start justify-between">
+            <div>
+                <h3 class="text-lg font-bold text-gray-900">Share Batch Link</h3>
+                <p class="text-sm text-gray-500 mt-0.5">Send this link to prospective students so they can view and enroll in this batch.</p>
+            </div>
+            <button id="close-share-modal"
+                    class="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-gray-100 transition-colors text-gray-500 shrink-0">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+            </button>
+        </div>
+        <div class="px-6 py-5">
+            <div class="flex items-center gap-2">
+                <input type="text" id="share-link-input" readonly value="{{ route('batches.show', $batch) }}"
+                       class="flex-1 px-3 py-2.5 text-sm border border-gray-200 rounded-lg bg-gray-50 text-gray-700 font-mono">
+                <button id="copy-share-link"
+                        class="shrink-0 px-4 py-2.5 bg-[#1e3a5f] text-white text-sm font-semibold rounded-lg hover:bg-[#162d4a] transition-colors">
+                    Copy
+                </button>
+            </div>
+            <p id="copy-confirmation" class="text-xs text-emerald-600 font-semibold mt-2 hidden">Link copied to clipboard.</p>
+        </div>
+        <div class="px-6 py-4 bg-gray-50/70 rounded-b-2xl border-t border-gray-100 flex justify-end">
+            <button type="button" id="discard-share"
+                    class="px-5 py-2.5 text-sm font-semibold text-gray-700 hover:text-gray-900 transition-colors">Close</button>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @push('scripts')
 <script>
+    // ─── Share Batch Link Modal ───────────────────────────────────────────────
+    const shareModal = document.getElementById('share-modal');
+    const openShareBtn = document.getElementById('open-share-modal');
+    const closeShareBtn = document.getElementById('close-share-modal');
+    const discardShareBtn = document.getElementById('discard-share');
+    const shareBackdrop = document.getElementById('share-modal-backdrop');
+    const copyShareBtn = document.getElementById('copy-share-link');
+
+    function openShareModal() { shareModal?.classList.remove('hidden'); }
+    function closeShareModal() { shareModal?.classList.add('hidden'); }
+
+    openShareBtn?.addEventListener('click', openShareModal);
+    closeShareBtn?.addEventListener('click', closeShareModal);
+    discardShareBtn?.addEventListener('click', closeShareModal);
+    shareBackdrop?.addEventListener('click', closeShareModal);
+
+    copyShareBtn?.addEventListener('click', async () => {
+        const input = document.getElementById('share-link-input');
+        await navigator.clipboard.writeText(input.value);
+        document.getElementById('copy-confirmation').classList.remove('hidden');
+    });
+
     // ─── Lecture Modal ───────────────────────────────────────────────────────
     const lectureModal = document.getElementById('lecture-modal');
     const openLectureBtn = document.getElementById('open-lecture-modal');

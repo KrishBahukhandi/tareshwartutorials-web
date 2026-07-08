@@ -3,7 +3,7 @@
     {{-- Batch Info Strip --}}
     <div class="mb-5">
         <p class="text-[11px] font-bold text-blue-600 uppercase tracking-widest mb-0.5">
-            {{ $batch->is_active ? 'Active Batch' : 'Inactive Batch' }} • {{ $batch->subject }}
+            {{ $batch->is_active ? 'Active Batch' : 'Inactive Batch' }} • {{ $batch->subjectNames() }}
         </p>
         <p class="text-sm text-gray-600 flex items-center gap-4">
             <span>{{ $batch->formattedSchedule() }}</span>
@@ -121,7 +121,7 @@
             <div>
                 <span class="font-semibold">Repository Status</span>
                 <span class="text-gray-400 ml-1">
-                    {{ $batch->batchNotes->count() }} file{{ $batch->batchNotes->count() !== 1 ? 's' : '' }} uploaded this session
+                    {{ $batch->batchNotes->count() }} file{{ $batch->batchNotes->count() !== 1 ? 's' : '' }} uploaded
                     •
                     {{ $batch->batchNotes->sum('file_size_kb') >= 1024
                         ? round($batch->batchNotes->sum('file_size_kb') / 1024, 1).' MB'
@@ -129,7 +129,6 @@
                 </span>
             </div>
         </div>
-        <a href="#" class="text-xs font-semibold text-blue-600 hover:text-blue-800 transition-colors">Storage Settings</a>
     </div>
 </div>
 
