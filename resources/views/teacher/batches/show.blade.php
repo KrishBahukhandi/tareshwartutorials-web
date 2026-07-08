@@ -51,11 +51,17 @@
                     ['key' => 'live_meeting',  'label' => 'Live Meetings'],
                     ['key' => 'lectures',      'label' => 'Lectures'],
                     ['key' => 'notes',         'label' => 'Notes'],
+                    ['key' => 'assignments',   'label' => 'Assignments'],
                 ];
             @endphp
 
             @foreach($tabs as $tabItem)
-                <a href="{{ route('teacher.batches.show', ['batch' => $batch, 'tab' => $tabItem['key']]) }}"
+                @php
+                    $href = $tabItem['key'] === 'assignments' 
+                        ? route('teacher.batches.assignments.index', $batch)
+                        : route('teacher.batches.show', ['batch' => $batch, 'tab' => $tabItem['key']]);
+                @endphp
+                <a href="{{ $href }}"
                    class="px-5 py-3 text-sm font-medium border-b-2 transition-colors
                           {{ $tab === $tabItem['key']
                               ? 'border-[#1e3a5f] text-[#1e3a5f]'

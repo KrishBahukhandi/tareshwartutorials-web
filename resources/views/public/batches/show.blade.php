@@ -40,6 +40,14 @@
                 <p><span class="font-semibold text-gray-900">Schedule:</span> {{ $batch->formattedSchedule() }}</p>
                 <p><span class="font-semibold text-gray-900">Next class:</span> {{ $batch->nextClassForHumans() }}</p>
                 <p><span class="font-semibold text-gray-900">Seats left:</span> {{ $batch->availableSeats() }}</p>
+                <div class="mt-4 pt-4 border-t border-gray-100 flex justify-between items-center">
+                    <span class="font-semibold text-gray-900">Price:</span>
+                    @if($batch->price > 0)
+                        <span class="text-xl font-bold text-primary">₹{{ number_format($batch->price, 2) }}</span>
+                    @else
+                        <span class="text-xl font-bold text-emerald-600">Free</span>
+                    @endif
+                </div>
             </div>
 
             @auth

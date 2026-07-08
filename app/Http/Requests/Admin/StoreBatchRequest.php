@@ -36,6 +36,7 @@ class StoreBatchRequest extends FormRequest
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'student_limit' => ['required', 'integer', 'min:1', 'max:500'],
+            'price' => ['nullable', 'numeric', 'min:0'],
             'teacher_id' => ['nullable', 'exists:users,id'],
         ];
     }

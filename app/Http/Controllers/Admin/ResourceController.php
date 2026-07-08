@@ -29,7 +29,7 @@ class ResourceController extends Controller
         $validated = $request->validate([
             'title'        => ['required', 'string', 'max:255'],
             'description'  => ['nullable', 'string'],
-            'type'         => ['required', 'in:note,pyq'],
+            'type'         => ['required', 'in:note,pyq,assignment'],
             'class_level'  => ['required', 'in:10,11,12'],
             'subject'      => ['required', 'string', 'max:100'],
             'chapter'      => ['nullable', 'string', 'max:200'],

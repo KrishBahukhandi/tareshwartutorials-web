@@ -159,6 +159,7 @@
 
                                 <div class="mt-5 flex flex-col gap-3 sm:flex-row">
                                     <a href="{{ route('batches.show', $batch) }}" class="inline-flex flex-1 justify-center rounded-2xl bg-[#101828] px-4 py-3 text-sm font-black text-white hover:bg-gray-800">Open Batch</a>
+                                    <a href="{{ route('student.batches.assignments.index', $batch) }}" class="inline-flex flex-1 justify-center rounded-2xl bg-[#1e3a8a] px-4 py-3 text-sm font-black text-white hover:bg-blue-900 shadow-sm">Assignments</a>
                                     @if($batch->meeting_link && $enrollment->status === 'active')
                                         <a href="{{ $batch->meeting_link }}" target="_blank" class="inline-flex flex-1 justify-center rounded-2xl bg-emerald-600 px-4 py-3 text-sm font-black text-white hover:bg-emerald-700">Join Live</a>
                                     @elseif($enrollment->status === 'active')

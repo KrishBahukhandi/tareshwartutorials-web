@@ -258,11 +258,18 @@
                     </div>
                 </div>
 
-                {{-- Student Limit --}}
-                <div>
-                    <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Student Limit</label>
-                    <input type="number" name="student_limit" value="30" min="1" max="500"
-                           class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                {{-- Student Limit & Price --}}
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Student Limit</label>
+                        <input type="number" name="student_limit" value="30" min="1" max="500"
+                               class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Price (₹)</label>
+                        <input type="number" name="price" value="0" min="0" step="0.01"
+                               class="w-full px-3 py-2.5 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#1e3a5f]/20 focus:border-[#1e3a5f]/50 transition">
+                    </div>
                 </div>
 
                 {{-- Class Schedule Days --}}

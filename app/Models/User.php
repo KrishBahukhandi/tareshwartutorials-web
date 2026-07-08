@@ -113,4 +113,9 @@ class User extends Authenticatable
             ? asset('storage/'.$this->profile_photo)
             : 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=1e3a5f&color=fff&size=128';
     }
+
+    public function assignmentSubmissions(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(AssignmentSubmission::class, 'student_id');
+    }
 }

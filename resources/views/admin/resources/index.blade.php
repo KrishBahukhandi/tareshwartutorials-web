@@ -45,7 +45,7 @@
                     </td>
                     <td class="px-5 py-3.5">
                         <span class="px-2 py-0.5 rounded-full text-xs font-bold
-                            {{ $resource->type === 'note' ? 'bg-blue-50 text-blue-700' : 'bg-amber-50 text-amber-700' }}">
+                            {{ $resource->type === 'note' ? 'bg-blue-50 text-blue-700' : ($resource->type === 'pyq' ? 'bg-amber-50 text-amber-700' : 'bg-emerald-50 text-emerald-700') }}">
                             {{ strtoupper($resource->type) }}
                         </span>
                     </td>

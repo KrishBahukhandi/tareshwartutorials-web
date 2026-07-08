@@ -20,6 +20,7 @@ class Batch extends Model
         'meeting_link',
         'meeting_title',
         'meeting_scheduled_at',
+        'price',
     ];
 
     protected function casts(): array
@@ -28,6 +29,7 @@ class Batch extends Model
             'schedule_days' => 'array',
             'is_active' => 'boolean',
             'meeting_scheduled_at' => 'datetime',
+            'price' => 'decimal:2',
         ];
     }
 
@@ -60,6 +62,11 @@ class Batch extends Model
     public function lectures(): \Illuminate\Database\Eloquent\Relations\HasMany
     {
         return $this->hasMany(Lecture::class)->orderBy('created_at', 'desc');
+    }
+
+    public function assignments(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Assignment::class)->orderBy('created_at', 'desc');
     }
 
     /**

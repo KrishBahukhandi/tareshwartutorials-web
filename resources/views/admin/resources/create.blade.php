@@ -30,7 +30,7 @@
                 <div>
                     <label class="block text-xs font-semibold text-gray-600 mb-2">Resource Type</label>
                     <div class="flex gap-3">
-                        @foreach(['note' => '📄 Notes', 'pyq' => '📝 Previous Year Questions'] as $val => $label)
+                        @foreach(['note' => '📄 Notes', 'pyq' => '📝 PYQs', 'assignment' => '🎓 Assignments'] as $val => $label)
                             <label class="flex-1 border-2 rounded-xl p-3 cursor-pointer transition-all
                                           {{ old('type', 'note') === $val ? 'border-[#1e3a5f] bg-blue-50' : 'border-gray-200 hover:border-gray-300' }}">
                                 <input type="radio" name="type" value="{{ $val }}" class="sr-only"

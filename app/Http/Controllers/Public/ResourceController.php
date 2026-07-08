@@ -57,6 +57,24 @@ class ResourceController extends Controller
         return view('public.resources.pyqs', compact('resources', 'classLevel'));
     }
 
+    public function assignments(Request $request): View
+    {
+        $classLevel = $request->query('class', '10');
+        
+        if (!in_array($classLevel, ['10', '12'])) {
+            $classLevel = '10';
+        }
+
+        $resources = FreeResource::published()
+            ->where('type', 'assignment')
+            ->where('class_level', $classLevel)
+            ->orderBy('subject')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('public.resources.assignments', compact('resources', 'classLevel'));
+    }
+
     /** View a single resource — inline PDF viewer. */
     public function show(FreeResource $freeResource): View
     {

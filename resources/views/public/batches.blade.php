@@ -124,7 +124,11 @@
                                 </div>
                                 
                                 <div class="flex items-center justify-between pt-4 border-t border-gray-100">
-                                    <span class="text-lg font-extrabold text-gray-900">₹{{ number_format(rand(2500, 8999)) }}</span>
+                                    @if($batch->price > 0)
+                                        <span class="text-lg font-extrabold text-gray-900">₹{{ number_format($batch->price, 2) }}</span>
+                                    @else
+                                        <span class="text-lg font-extrabold text-emerald-600">Free</span>
+                                    @endif
                                     <a href="{{ route('batches.show', $batch) }}" class="px-4 py-1.5 border border-gray-300 text-gray-700 text-sm font-semibold rounded hover:bg-gray-50 transition-colors">View Details</a>
                                 </div>
                             </div>

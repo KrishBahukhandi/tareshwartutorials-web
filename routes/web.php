@@ -20,6 +20,9 @@ use App\Http\Controllers\Teacher\ResourceController as TeacherResourceController
 use App\Http\Controllers\Teacher\ScheduleController as TeacherScheduleController;
 use App\Http\Controllers\Teacher\SettingsController as TeacherSettingsController;
 use App\Http\Controllers\PublicController;
+use App\Http\Controllers\Student\AssignmentController as StudentAssignmentController;
+use App\Http\Controllers\Teacher\AssignmentController as TeacherAssignmentController;
+use App\Http\Controllers\Teacher\SubmissionController as TeacherSubmissionController;
 use Illuminate\Support\Facades\Route;
 
 // ─── Public ───────────────────────────────────────────────────────────────────
@@ -34,6 +37,7 @@ Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
 // Free Notes / Resources (no auth required)
 Route::get('/notes', [PublicResourceController::class, 'index'])->name('notes.index');
 Route::get('/pyqs', [PublicResourceController::class, 'pyqs'])->name('pyqs.index');
+Route::get('/assignments', [PublicResourceController::class, 'assignments'])->name('assignments.index');
 Route::get('/notes/{freeResource}', [PublicResourceController::class, 'show'])->name('notes.show');
 Route::get('/notes/{freeResource}/download', [PublicResourceController::class, 'download'])->name('notes.download');
 
@@ -91,8 +95,14 @@ Route::prefix('student')
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
         Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('/batches/{batch}/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
+        Route::post('/batches/{batch}/payment/verify', [\App\Http\Controllers\Student\PaymentController::class, 'verify'])->name('payment.verify');
         Route::post('/batches/{batch}/enroll', [EnrollmentController::class, 'store'])->name('enrollments.store');
         Route::delete('/batches/{batch}/enroll', [EnrollmentController::class, 'destroy'])->name('enrollments.destroy');
+
+        // Assignments
+        Route::get('/batches/{batch}/assignments', [StudentAssignmentController::class, 'index'])->name('batches.assignments.index');
+        Route::get('/batches/{batch}/assignments/{assignment}', [StudentAssignmentController::class, 'show'])->name('batches.assignments.show');
+        Route::post('/batches/{batch}/assignments/{assignment}', [StudentAssignmentController::class, 'submit'])->name('batches.assignments.submit');
     });
 
 // ─── Teacher ──────────────────────────────────────────────────────────────────
@@ -124,4 +134,15 @@ Route::prefix('teacher')
         Route::post('batches/{batch}/notes', [NoteController::class, 'store'])->name('batches.notes.store');
         Route::get('batches/{batch}/notes/{note}/download', [NoteController::class, 'download'])->name('batches.notes.download');
         Route::delete('batches/{batch}/notes/{note}', [NoteController::class, 'destroy'])->name('batches.notes.destroy');
+
+        // Assignments
+        Route::get('batches/{batch}/assignments', [TeacherAssignmentController::class, 'index'])->name('batches.assignments.index');
+        Route::get('batches/{batch}/assignments/create', [TeacherAssignmentController::class, 'create'])->name('batches.assignments.create');
+        Route::post('batches/{batch}/assignments', [TeacherAssignmentController::class, 'store'])->name('batches.assignments.store');
+        Route::delete('batches/{batch}/assignments/{assignment}', [TeacherAssignmentController::class, 'destroy'])->name('batches.assignments.destroy');
+
+        // Assignment Submissions (Grading)
+        Route::get('batches/{batch}/assignments/{assignment}/submissions', [TeacherSubmissionController::class, 'index'])->name('batches.assignments.submissions.index');
+        Route::get('batches/{batch}/assignments/{assignment}/submissions/{submission}', [TeacherSubmissionController::class, 'show'])->name('batches.assignments.submissions.show');
+        Route::post('batches/{batch}/assignments/{assignment}/submissions/{submission}/grade', [TeacherSubmissionController::class, 'grade'])->name('batches.assignments.submissions.grade');
     });

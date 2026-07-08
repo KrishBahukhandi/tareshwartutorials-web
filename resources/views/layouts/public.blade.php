@@ -467,6 +467,22 @@
                     </div>
                 </div>
 
+                {{-- Assignments Dropdown --}}
+                <div class="relative group">
+                    <button class="flex items-center gap-1 px-3 h-[44px] text-sm font-medium transition-colors text-gray-600 hover:text-[#1e3a5f]">
+                        Assignments
+                        <svg class="w-3.5 h-3.5 text-gray-400 transition-transform duration-200 group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                    </button>
+                    <div class="absolute left-0 top-full mt-1 w-40 bg-white rounded-xl shadow-xl border border-gray-100
+                                opacity-0 invisible group-hover:opacity-100 group-hover:visible
+                                transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 py-2">
+                        <a href="{{ route('assignments.index', ['class' => 10]) }}" class="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1e3a5f] transition-colors rounded-lg mx-1">Class 10</a>
+                        <a href="{{ route('assignments.index', ['class' => 12]) }}" class="block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:text-[#1e3a5f] transition-colors rounded-lg mx-1">Class 12</a>
+                    </div>
+                </div>
+
                 {{-- About Us --}}
                 <a href="{{ route('about') }}"
                    class="px-3 h-[44px] flex items-center text-sm font-medium transition-colors {{ request()->routeIs('about') ? 'text-[#1e3a5f] font-bold border-b-2 border-[#1e3a5f]' : 'text-gray-600 hover:text-[#1e3a5f]' }}">
@@ -528,6 +544,22 @@
                     <a href="{{ route('notes.index', ['class' => '10']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 10</a>
                     <a href="{{ route('notes.index', ['class' => '11']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 11</a>
                     <a href="{{ route('notes.index', ['class' => '12']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 12</a>
+                </div>
+            </div>
+
+            <div class="px-4 py-3">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">PYQs</p>
+                <div class="space-y-1 ml-2">
+                    <a href="{{ route('pyqs.index', ['class' => '10']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 10</a>
+                    <a href="{{ route('pyqs.index', ['class' => '12']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 12</a>
+                </div>
+            </div>
+
+            <div class="px-4 py-3">
+                <p class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">Assignments</p>
+                <div class="space-y-1 ml-2">
+                    <a href="{{ route('assignments.index', ['class' => '10']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 10</a>
+                    <a href="{{ route('assignments.index', ['class' => '12']) }}" class="block py-1.5 text-sm text-gray-600 hover:text-[#1e3a5f]">Class 12</a>
                 </div>
             </div>
 
