@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\FreeResource;
 use Illuminate\Http\Request;
-use Illuminate\Http\Response;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ResourceController extends Controller
 {
@@ -34,7 +34,7 @@ class ResourceController extends Controller
         ));
     }
 
-    /** Browse PYQs — filter by class. */
+    /** Browse PYQs — pick a subject, then filter by class + subject. */
     public function pyqs(Request $request): View
     {
         $classLevel = $request->query('class', '10');
@@ -44,17 +44,32 @@ class ResourceController extends Controller
             $classLevel = '10';
         }
 
-        // We filter by type='pyq' assuming we use the type column for this.
-        // If type column doesn't exist or isn't used this way, we can just filter by something else,
-        // but the DB schema has a 'type' column (from our model inspection earlier).
-        $resources = FreeResource::published()
+        $subjects = FreeResource::pyqSubjectsForClass($classLevel);
+
+        $subject = $request->query('subject');
+        if ($subject && ! in_array($subject, $subjects)) {
+            $subject = null;
+        }
+
+        $counts = FreeResource::published()
             ->where('type', 'pyq')
             ->where('class_level', $classLevel)
-            ->orderBy('subject')
-            ->orderBy('year', 'desc')
-            ->get();
+            ->selectRaw('subject, count(*) as aggregate')
+            ->groupBy('subject')
+            ->pluck('aggregate', 'subject');
 
-        return view('public.resources.pyqs', compact('resources', 'classLevel'));
+        $resources = collect();
+
+        if ($subject) {
+            $resources = FreeResource::published()
+                ->where('type', 'pyq')
+                ->where('class_level', $classLevel)
+                ->where('subject', $subject)
+                ->orderBy('year', 'desc')
+                ->get();
+        }
+
+        return view('public.resources.pyqs', compact('resources', 'classLevel', 'subject', 'subjects', 'counts'));
     }
 
     public function assignments(Request $request): View
@@ -98,7 +113,7 @@ class ResourceController extends Controller
     }
 
     /** Direct PDF download. */
-    public function download(FreeResource $freeResource): Response
+    public function download(FreeResource $freeResource): BinaryFileResponse
     {
         abort_unless($freeResource->is_published, 404);
         $freeResource->increment('download_count');

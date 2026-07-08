@@ -75,6 +75,21 @@ class FreeResource extends Model
         return collect($groups)->flatten()->unique()->values()->all();
     }
 
+    /**
+     * Main subjects for PYQ browsing, per class — matches how CBSE actually
+     * sets board exam papers (e.g. Class 10 Social Science is one combined
+     * paper, unlike the chapter-notes taxonomy which splits it into 4).
+     *
+     * @return string[]
+     */
+    public static function pyqSubjectsForClass(string $class): array
+    {
+        return match ($class) {
+            '10' => ['Mathematics', 'Science', 'Social Science', 'English', 'Hindi'],
+            default => static::subjectsForClass($class),
+        };
+    }
+
     /** Scope: published only. */
     public function scopePublished($query)
     {

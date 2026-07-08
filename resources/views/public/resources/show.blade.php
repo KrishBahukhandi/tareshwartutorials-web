@@ -50,11 +50,15 @@
                 </div>
 
                 {{-- PDF Viewer --}}
-                <div class="bg-gray-100" style="height: 75vh;">
+                <div class="bg-gray-100" style="height: 85vh; min-height: 950px;">
                     <iframe
-                        src="https://docs.google.com/gview?embedded=true&url={{ urlencode($freeResource->fileUrl()) }}"
+                        src="{{ $freeResource->fileUrl() }}#toolbar=1"
                         class="w-full h-full border-0"
                         title="{{ $freeResource->title }}">
+                        <p class="p-lg text-sm text-on-surface-variant">
+                            Your browser can't display this PDF inline.
+                            <a href="{{ route('notes.download', $freeResource) }}" class="text-primary font-semibold hover:underline">Download it instead</a>.
+                        </p>
                     </iframe>
                 </div>
             </div>
