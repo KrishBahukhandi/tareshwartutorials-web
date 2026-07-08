@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordChangeController;
 use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\Auth\ResetPasswordController;
+use App\Http\Controllers\NewsletterSubscriptionController;
 use App\Http\Controllers\Public\ResourceController as PublicResourceController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\SearchController;
@@ -19,6 +20,7 @@ use App\Http\Controllers\Student\CheckoutController;
 use App\Http\Controllers\Student\DashboardController as StudentDashboardController;
 use App\Http\Controllers\Student\EnrollmentController;
 use App\Http\Controllers\Student\PaymentController;
+use App\Http\Controllers\Student\SettingsController as StudentSettingsController;
 use App\Http\Controllers\Teacher\AssignmentController as TeacherAssignmentController;
 use App\Http\Controllers\Teacher\BatchController as TeacherBatchController;
 use App\Http\Controllers\Teacher\DashboardController as TeacherDashboardController;
@@ -34,6 +36,7 @@ use Illuminate\Support\Facades\Route;
 // ─── Public ───────────────────────────────────────────────────────────────────
 Route::get('/', [PublicController::class, 'index'])->name('home');
 Route::get('/sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
+Route::post('/newsletter/subscribe', [NewsletterSubscriptionController::class, 'store'])->name('newsletter.subscribe');
 Route::get('/robots.txt', [SitemapController::class, 'robots'])->name('robots');
 Route::get('/batches', [PublicController::class, 'batches'])->name('batches.index');
 Route::get('/search', [SearchController::class, 'index'])->name('search');
@@ -113,6 +116,8 @@ Route::prefix('student')
     ->middleware(['auth', 'role:student'])
     ->group(function () {
         Route::get('/dashboard', [StudentDashboardController::class, 'index'])->name('dashboard');
+        Route::get('/settings', [StudentSettingsController::class, 'index'])->name('settings');
+        Route::put('/settings', [StudentSettingsController::class, 'update'])->name('settings.update');
         Route::get('/enrollments', [EnrollmentController::class, 'index'])->name('enrollments.index');
         Route::get('/batches/{batch}/checkout', [CheckoutController::class, 'show'])->name('checkout.show');
         Route::post('/batches/{batch}/payment/verify', [PaymentController::class, 'verify'])->name('payment.verify');

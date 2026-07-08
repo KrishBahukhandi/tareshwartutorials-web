@@ -90,6 +90,22 @@ class FreeResource extends Model
         };
     }
 
+    /**
+     * Subjects with chapter-wise assignment content, per class — currently
+     * limited to NCERT Exemplar Problems, which only cover Maths/Science
+     * subjects (no official equivalent exists for Social Science, languages, etc).
+     *
+     * @return string[]
+     */
+    public static function assignmentSubjectsForClass(string $class): array
+    {
+        return match ($class) {
+            '10' => ['Mathematics', 'Science'],
+            '12' => ['Mathematics', 'Physics', 'Chemistry', 'Biology'],
+            default => [],
+        };
+    }
+
     /** Scope: published only. */
     public function scopePublished($query)
     {

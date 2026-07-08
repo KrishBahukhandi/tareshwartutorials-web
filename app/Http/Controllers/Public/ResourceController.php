@@ -72,6 +72,7 @@ class ResourceController extends Controller
         return view('public.resources.pyqs', compact('resources', 'classLevel', 'subject', 'subjects', 'counts'));
     }
 
+    /** Browse Assignments — pick a subject, then filter by class + subject. */
     public function assignments(Request $request): View
     {
         $classLevel = $request->query('class', '10');
@@ -80,14 +81,32 @@ class ResourceController extends Controller
             $classLevel = '10';
         }
 
-        $resources = FreeResource::published()
+        $subjects = FreeResource::assignmentSubjectsForClass($classLevel);
+
+        $subject = $request->query('subject');
+        if ($subject && ! in_array($subject, $subjects)) {
+            $subject = null;
+        }
+
+        $counts = FreeResource::published()
             ->where('type', 'assignment')
             ->where('class_level', $classLevel)
-            ->orderBy('subject')
-            ->orderBy('created_at', 'desc')
-            ->get();
+            ->selectRaw('subject, count(*) as aggregate')
+            ->groupBy('subject')
+            ->pluck('aggregate', 'subject');
 
-        return view('public.resources.assignments', compact('resources', 'classLevel'));
+        $resources = collect();
+
+        if ($subject) {
+            $resources = FreeResource::published()
+                ->where('type', 'assignment')
+                ->where('class_level', $classLevel)
+                ->where('subject', $subject)
+                ->orderBy('chapter')
+                ->get();
+        }
+
+        return view('public.resources.assignments', compact('resources', 'classLevel', 'subject', 'subjects', 'counts'));
     }
 
     /** View a single resource — inline PDF viewer. */

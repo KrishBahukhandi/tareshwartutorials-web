@@ -340,6 +340,12 @@
                             'student' => ['route' => route('student.dashboard'), 'label' => 'Student Portal', 'icon' => 'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z'],
                             default   => ['route' => route('home'),              'label' => 'Dashboard',      'icon' => 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6'],
                         };
+                        $settingsRoute = match(auth()->user()->role) {
+                            'admin'   => route('admin.settings'),
+                            'teacher' => route('teacher.settings'),
+                            'student' => route('student.settings'),
+                            default   => null,
+                        };
                         $initials = collect(explode(' ', auth()->user()->name))->map(fn($w) => strtoupper($w[0]))->take(2)->join('');
                     @endphp
 
@@ -373,10 +379,7 @@
                             <a href="{{ $portal['route'] }}" class="flex items-center gap-3 px-4 py-2.5 text-sm font-semibold text-[#1e3a5f] hover:bg-[#1e3a5f] hover:text-white transition-colors rounded-lg mx-1">
                                 {{ $portal['label'] }}
                             </a>
-                            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-lg mx-1">
-                                My Notes
-                            </a>
-                            <a href="#" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-lg mx-1">
+                            <a href="{{ $settingsRoute }}" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 transition-colors rounded-lg mx-1">
                                 Account Settings
                             </a>
                             <div class="border-t border-gray-100 mt-1 pt-1">
@@ -669,7 +672,6 @@
             <div class="grid grid-cols-2 sm:grid-cols-3 gap-xl">
                 <div class="flex flex-col gap-sm">
                     <h5 class="text-white font-bold text-sm uppercase tracking-wider">Company</h5>
-                    <a class="font-body-sm text-body-sm text-on-primary-container dark:text-outline-variant hover:text-on-primary transition-all" href="#">Careers</a>
                     <a class="font-body-sm text-body-sm text-on-primary-container dark:text-outline-variant hover:text-on-primary transition-all" href="{{ route('about') }}">About Us</a>
                 </div>
                 <div class="flex flex-col gap-sm">

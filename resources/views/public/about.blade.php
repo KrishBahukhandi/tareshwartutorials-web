@@ -1,7 +1,7 @@
 @extends('layouts.public')
 
 @section('title', 'About Us | Tareshwar Tutorials')
-@section('description', 'Learn about Tareshwar Tutorials — small-batch, teacher-led coaching focused on academic precision for Class 10 and Class 12 students.')
+@section('description', 'Learn about Tareshwar Tutorials — a two-teacher coaching centre in Sector 19, Panchkula, run since 2018 with small batches and personal attention for Classes I–XII.')
 
 @section('content')
 
@@ -11,15 +11,36 @@
         <div class="absolute top-0 left-0 w-full h-full" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
     </div>
     <div class="max-w-container-max mx-auto px-gutter relative z-10 text-center">
+        <span class="inline-block bg-secondary-fixed text-primary text-xs font-bold uppercase tracking-wider px-md py-xs rounded-full mb-md">
+            Now enrolling for Session 2026–27
+        </span>
         <h1 class="font-headline-xl text-headline-xl text-on-primary mb-md">Small batches, big breakthroughs.</h1>
         <p class="font-body-lg text-body-lg text-secondary-fixed">Learning that feels like home.</p>
+    </div>
+</section>
+
+{{-- ── Stats Band ── --}}
+<section class="bg-primary-container py-xl border-b border-outline-variant">
+    <div class="max-w-container-max mx-auto px-gutter grid grid-cols-3 gap-lg text-center">
+        <div>
+            <p class="font-headline-lg text-headline-lg text-on-primary font-extrabold">320+</p>
+            <p class="text-secondary-fixed text-sm mt-1">Students taught</p>
+        </div>
+        <div>
+            <p class="font-headline-lg text-headline-lg text-on-primary font-extrabold">96%</p>
+            <p class="text-secondary-fixed text-sm mt-1">Class X &amp; XII pass rate</p>
+        </div>
+        <div>
+            <p class="font-headline-lg text-headline-lg text-on-primary font-extrabold">8 yrs</p>
+            <p class="text-secondary-fixed text-sm mt-1">In the neighbourhood</p>
+        </div>
     </div>
 </section>
 
 {{-- ── About Content ── --}}
 <section class="py-xxl bg-background">
     <div class="max-w-container-max mx-auto px-gutter space-y-xl">
-        
+
         {{-- Intro Section --}}
         <div class="max-w-3xl mx-auto text-center mb-xxl">
             <p class="text-on-surface-variant text-lg leading-relaxed">
@@ -38,7 +59,7 @@
 
         {{-- Faculty Grid --}}
         <div class="grid lg:grid-cols-2 gap-xl">
-            
+
             {{-- Teacher 1 --}}
             <div class="bg-white border border-outline-variant rounded-2xl p-xl shadow-sm text-on-surface flex flex-col md:flex-row gap-lg items-start">
                 <div class="w-full md:w-1/3 aspect-[4/5] bg-surface-container-low rounded-xl overflow-hidden shrink-0">
@@ -94,6 +115,68 @@
 
         </div>
 
+        {{-- Results Section --}}
+        <div class="mt-xxl border-t border-outline-variant pt-xxl">
+            <div class="text-center mb-xl">
+                <span class="text-secondary font-bold tracking-wider uppercase text-sm mb-sm block">Our Students</span>
+                <h2 class="font-headline-lg text-headline-lg text-primary mb-md">Results that speak for themselves.</h2>
+                <p class="text-on-surface-variant max-w-2xl mx-auto">
+                    Class X · CBSE Board 2025–26. We're proud of every student who walked through the door and put in the work.
+                </p>
+            </div>
+            <div class="grid sm:grid-cols-2 gap-lg max-w-2xl mx-auto">
+                <div class="bg-white border border-outline-variant rounded-2xl p-xl text-center shadow-sm">
+                    <p class="font-headline-xl text-headline-xl text-primary font-extrabold">92%</p>
+                    <p class="text-on-surface-variant text-sm mt-sm">Class X · CBSE 2026</p>
+                    <span class="inline-block mt-sm text-xs font-bold uppercase tracking-wider text-secondary">🏆 Top Scorer</span>
+                </div>
+                <div class="bg-white border border-outline-variant rounded-2xl p-xl text-center shadow-sm">
+                    <p class="font-headline-xl text-headline-xl text-primary font-extrabold">83%</p>
+                    <p class="text-on-surface-variant text-sm mt-sm">Class X · CBSE 2026</p>
+                    <span class="inline-block mt-sm text-xs font-bold uppercase tracking-wider text-secondary">⭐ Distinction</span>
+                </div>
+            </div>
+        </div>
+
+        {{-- What We Teach Section --}}
+        <div class="mt-xxl border-t border-outline-variant pt-xxl">
+            <div class="text-center mb-xl">
+                <span class="text-secondary font-bold tracking-wider uppercase text-sm mb-sm block">What We Teach</span>
+                <h2 class="font-headline-lg text-headline-lg text-primary mb-md">Tuition built around how your child actually learns.</h2>
+                <p class="text-on-surface-variant max-w-2xl mx-auto">
+                    Four grade-banded programs, every batch kept small so questions are never a luxury.
+                </p>
+            </div>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-lg">
+                <div class="bg-white border border-outline-variant rounded-xl p-lg">
+                    <h3 class="font-bold text-primary mb-1">Foundation</h3>
+                    <p class="text-xs text-on-surface-variant mb-sm">Classes I – V</p>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Reading fluency, mental maths, EVS — playful, story-led, and never rushed.</p>
+                </div>
+                <div class="bg-white border border-outline-variant rounded-xl p-lg">
+                    <h3 class="font-bold text-primary mb-1">Middle School</h3>
+                    <p class="text-xs text-on-surface-variant mb-sm">Classes VI – VIII</p>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">The years where habits stick — a study system that carries into board years.</p>
+                </div>
+                <div class="bg-white border border-outline-variant rounded-xl p-lg">
+                    <h3 class="font-bold text-primary mb-1">Board Year</h3>
+                    <p class="text-xs text-on-surface-variant mb-sm">Classes IX – X</p>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">CBSE-aligned with weekly chapter tests and dedicated pre-board revision.</p>
+                </div>
+                <div class="bg-white border border-outline-variant rounded-xl p-lg">
+                    <h3 class="font-bold text-primary mb-1">Senior Science</h3>
+                    <p class="text-xs text-on-surface-variant mb-sm">Classes XI – XII</p>
+                    <p class="text-sm text-on-surface-variant leading-relaxed">Biology &amp; Chemistry by subject specialists, with NEET-style problem sets.</p>
+                </div>
+            </div>
+            <div class="text-center mt-xl">
+                <a href="{{ route('batches.index') }}" class="inline-flex items-center gap-sm bg-primary text-white px-lg py-md rounded-lg font-bold hover:bg-secondary transition-colors">
+                    Explore Batches
+                    <span class="material-symbols-outlined text-[20px]">arrow_forward</span>
+                </a>
+            </div>
+        </div>
+
         {{-- Our Centre Section --}}
         <div class="mt-xxl border-t border-outline-variant pt-xxl">
             <div class="grid lg:grid-cols-2 gap-xl items-center">
@@ -101,14 +184,30 @@
                     <span class="text-secondary font-bold tracking-wider uppercase text-sm mb-sm block">Our Centre</span>
                     <h2 class="font-headline-lg text-headline-lg text-primary mb-md">Learn where you belong.</h2>
                     <p class="text-on-surface-variant text-lg leading-relaxed">
-                        Located conveniently in Sector 19, Panchkula, our centre is designed to be a focused, distraction-free environment where students can truly engage with their subjects. 
+                        Located conveniently in Sector 19, Panchkula, our centre is designed to be a focused, distraction-free environment where students can truly engage with their subjects.
                     </p>
-                    <div class="bg-surface-container-low p-md rounded-xl border border-outline-variant inline-block">
+                    <div class="bg-surface-container-low p-md rounded-xl border border-outline-variant space-y-md">
                         <div class="flex items-start gap-md">
                             <span class="material-symbols-outlined text-secondary text-[24px]">location_on</span>
                             <div>
                                 <h4 class="font-bold text-primary mb-1">Tareshwar Tutorials</h4>
-                                <p class="text-on-surface-variant text-sm">CN OO18, Sector 19<br>Panchkula, Haryana 134113</p>
+                                <p class="text-on-surface-variant text-sm">CN 0018, Basement Sector 19<br>Panchkula, Haryana 134113</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-md">
+                            <span class="material-symbols-outlined text-secondary text-[24px]">schedule</span>
+                            <div>
+                                <h4 class="font-bold text-primary mb-1">Office Hours</h4>
+                                <p class="text-on-surface-variant text-sm">Mon – Sat · 3:30 PM – 9:30 PM<br>Sundays off</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-md">
+                            <span class="material-symbols-outlined text-secondary text-[24px]">call</span>
+                            <div>
+                                <h4 class="font-bold text-primary mb-1">Call or WhatsApp</h4>
+                                <p class="text-on-surface-variant text-sm">
+                                    <a href="tel:+916280554348" class="hover:underline">+91 62805 54348</a>
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -116,18 +215,18 @@
                 <div class="grid grid-cols-2 gap-md">
                     <div class="space-y-md">
                         <div class="rounded-xl overflow-hidden shadow-sm h-48">
-                            <img src="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?auto=format&fit=crop&q=80&w=800" alt="Classroom" class="w-full h-full object-cover">
+                            <img src="{{ asset('images/centre-classroom-1.jpeg') }}" alt="Tareshwar Tutorials classroom" class="w-full h-full object-cover">
                         </div>
                         <div class="rounded-xl overflow-hidden shadow-sm h-32">
-                            <img src="https://images.unsplash.com/photo-1497633762265-9d179a990aa6?auto=format&fit=crop&q=80&w=800" alt="Study materials" class="w-full h-full object-cover">
+                            <img src="{{ asset('images/centre-classroom-2.jpeg') }}" alt="Classroom seating and whiteboard" class="w-full h-full object-cover">
                         </div>
                     </div>
                     <div class="space-y-md mt-lg">
                         <div class="rounded-xl overflow-hidden shadow-sm h-32">
-                            <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&q=80&w=800" alt="Student studying" class="w-full h-full object-cover">
+                            <img src="{{ asset('images/centre-classroom-3.jpeg') }}" alt="Classroom with podium" class="w-full h-full object-cover">
                         </div>
-                        <div class="rounded-xl overflow-hidden shadow-sm h-48">
-                            <img src="https://images.unsplash.com/photo-1427504494785-3a9ca7044f45?auto=format&fit=crop&q=80&w=800" alt="Discussion" class="w-full h-full object-cover">
+                        <div class="rounded-xl overflow-hidden shadow-sm h-48 bg-surface-container-low flex items-center justify-center">
+                            <img src="{{ asset('images/logo.jpeg') }}" alt="Tareshwar Tutorials logo" class="w-2/3 h-2/3 object-contain">
                         </div>
                     </div>
                 </div>

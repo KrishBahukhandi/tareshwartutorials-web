@@ -39,11 +39,11 @@
                 <div class="absolute bottom-md right-md glass-card p-md rounded-lg shadow-xl animate-bounce">
                     <div class="flex items-center gap-sm">
                         <div class="bg-on-tertiary-container/10 p-xs rounded-full">
-                            <span class="material-symbols-outlined text-on-tertiary-container">trending_up</span>
+                            <span class="material-symbols-outlined text-on-tertiary-container">school</span>
                         </div>
                         <div>
-                            <p class="text-label-sm font-bold text-primary">Live Sessions</p>
-                            <p class="text-xs text-on-surface-variant">Starting in 15 mins</p>
+                            <p class="text-label-sm font-bold text-primary">320+ Students Taught</p>
+                            <p class="text-xs text-on-surface-variant">8 years in Panchkula</p>
                         </div>
                     </div>
                 </div>
@@ -52,16 +52,22 @@
     </div>
 </section>
 
-{{-- ── Trusted By Section ── --}}
+{{-- ── Stats Section ── --}}
 <section class="bg-surface-container-low py-xl">
     <div class="max-w-container-max mx-auto px-gutter transition-all duration-700 opacity-100 translate-y-0">
-        <p class="text-center font-label-md text-on-surface-variant mb-xl">TRUSTED BY STUDENTS FROM LEADING SCHOOLS IN PANCHKULA & CHANDIGARH</p>
-        <div class="flex flex-wrap justify-center items-center gap-xxl grayscale opacity-60">
-            <div class="h-8 w-32 bg-outline-variant rounded animate-pulse"></div>
-            <div class="h-8 w-24 bg-outline-variant rounded animate-pulse"></div>
-            <div class="h-8 w-40 bg-outline-variant rounded animate-pulse"></div>
-            <div class="h-8 w-28 bg-outline-variant rounded animate-pulse"></div>
-            <div class="h-8 w-36 bg-outline-variant rounded animate-pulse"></div>
+        <div class="grid grid-cols-3 gap-lg text-center">
+            <div>
+                <p class="font-headline-lg text-headline-lg text-primary font-extrabold">320+</p>
+                <p class="text-on-surface-variant text-sm mt-1">Students taught</p>
+            </div>
+            <div>
+                <p class="font-headline-lg text-headline-lg text-primary font-extrabold">96%</p>
+                <p class="text-on-surface-variant text-sm mt-1">Class X &amp; XII pass rate</p>
+            </div>
+            <div>
+                <p class="font-headline-lg text-headline-lg text-primary font-extrabold">8 yrs</p>
+                <p class="text-on-surface-variant text-sm mt-1">In the neighbourhood</p>
+            </div>
         </div>
     </div>
 </section>
@@ -98,7 +104,7 @@
                     <span class="material-symbols-outlined text-[40px]">workspace_premium</span>
                 </div>
                 <h3 class="font-headline-md text-headline-md text-primary">Excel</h3>
-                <p class="font-body-md text-body-md text-on-surface-variant">Apply your mastery through real-world projects and earn recognized certifications to boost your career.</p>
+                <p class="font-body-md text-body-md text-on-surface-variant">Practice with assignments, previous year papers, and personalised feedback so you walk into your board exams fully prepared.</p>
             </div>
         </div>
     </div>
@@ -109,7 +115,7 @@
     <div class="max-w-container-max mx-auto px-gutter transition-all duration-700 opacity-100 translate-y-0">
         <div class="grid lg:grid-cols-2 gap-xxl items-center">
             <div class="relative h-64 md:h-96 rounded-2xl overflow-hidden shadow-2xl border border-white/20">
-                <img class="absolute inset-0 w-full h-full object-cover" src="https://images.unsplash.com/photo-1577896851231-70ef18881754?auto=format&fit=crop&q=80&w=1000" alt="Tareshwar Tutorials Offline Centre in Panchkula">
+                <img class="absolute inset-0 w-full h-full object-cover" src="{{ asset('images/centre-classroom-3.jpeg') }}" alt="Tareshwar Tutorials Offline Centre in Panchkula">
                 <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"></div>
                 <div class="absolute bottom-md left-md right-md flex items-center gap-sm">
                     <span class="material-symbols-outlined text-white">location_on</span>
@@ -232,7 +238,7 @@
                         <p class="text-on-surface-variant text-sm mb-md">{{ implode(', ', $featuredBatches[1]->subjects->pluck('name')->toArray()) }} for {{ $featuredBatches[1]->grade }}</p>
                     </div>
                     <div class="flex items-center justify-between mt-auto">
-                        <span class="text-primary font-bold"></span>
+                        <span class="text-primary font-bold">{{ $featuredBatches[1]->student_limit }} Seats</span>
                         <a href="{{ route('batches.show', $featuredBatches[1]) }}" class="text-primary font-bold hover:underline">Details</a>
                     </div>
                 </div>
@@ -253,7 +259,7 @@
                         <p class="text-on-surface-variant text-sm mb-md">{{ implode(', ', $featuredBatches[2]->subjects->pluck('name')->toArray()) }} for {{ $featuredBatches[2]->grade }}</p>
                     </div>
                     <div class="flex items-center justify-between mt-auto">
-                        <span class="text-primary font-bold"></span>
+                        <span class="text-primary font-bold">{{ $featuredBatches[2]->student_limit }} Seats</span>
                         <a href="{{ route('batches.show', $featuredBatches[2]) }}" class="text-primary font-bold hover:underline">Details</a>
                     </div>
                 </div>
@@ -266,10 +272,11 @@
                     <h4 class="text-2xl font-bold mb-xs text-white">Don't see what you're looking for?</h4>
                     <p class="text-on-primary-container">We launch new specialized batches every month. Get notified.</p>
                 </div>
-                <div class="flex w-full md:w-auto bg-white/10 rounded-lg p-xs border border-white/20">
-                    <input class="bg-transparent border-none text-white focus:ring-0 w-full px-md placeholder:text-on-primary-container" placeholder="Enter your email" type="email">
-                    <button class="bg-on-primary text-primary px-lg py-sm rounded font-bold whitespace-nowrap">Notify Me</button>
-                </div>
+                <form action="{{ route('newsletter.subscribe') }}" method="POST" class="flex w-full md:w-auto bg-white/10 rounded-lg p-xs border border-white/20">
+                    @csrf
+                    <input name="email" required class="bg-transparent border-none text-white focus:ring-0 w-full px-md placeholder:text-on-primary-container" placeholder="Enter your email" type="email">
+                    <button type="submit" class="bg-on-primary text-primary px-lg py-sm rounded font-bold whitespace-nowrap">Notify Me</button>
+                </form>
             </div>
         </div>
     </div>
@@ -341,7 +348,7 @@
         <p class="text-on-primary-container max-w-xl mx-auto">Limited seats available for the upcoming Winter Batches. Secure your spot and join the ranks of high-performance learners.</p>
         <div class="flex flex-col sm:flex-row items-center justify-center gap-md">
             <a href="{{ route('batches.index') }}" class="bg-on-primary text-primary px-xl py-md rounded-lg font-bold transition-transform active:scale-95 shadow-xl">Join the Next Batch</a>
-            <a href="{{ route('support') }}" class="border border-on-primary text-on-primary px-xl py-md rounded-lg font-bold hover:bg-white/10">Schedule a Call</a>
+            <a href="{{ route('contact') }}" class="border border-on-primary text-on-primary px-xl py-md rounded-lg font-bold hover:bg-white/10">Schedule a Call</a>
         </div>
     </div>
 </section>
