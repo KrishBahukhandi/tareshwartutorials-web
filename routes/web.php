@@ -5,9 +5,11 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\ResourceController as AdminResourceController;
 use App\Http\Controllers\Admin\SettingsController;
 use App\Http\Controllers\Admin\TeacherController;
+use App\Http\Controllers\Auth\ForgotPasswordController;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\PasswordChangeController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\Auth\ResetPasswordController;
 use App\Http\Controllers\Public\ResourceController as PublicResourceController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\Student\AssignmentController as StudentAssignmentController;
@@ -53,6 +55,12 @@ Route::middleware('auth')->group(function () {
     Route::get('/change-password', [PasswordChangeController::class, 'show'])->name('password.change');
     Route::put('/change-password', [PasswordChangeController::class, 'update'])->name('password.change.update');
 });
+
+// Auth — Forgot / Reset Password
+Route::get('/forgot-password', [ForgotPasswordController::class, 'show'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'send'])->name('password.email');
+Route::get('/reset-password/{token}', [ResetPasswordController::class, 'show'])->name('password.reset');
+Route::post('/reset-password', [ResetPasswordController::class, 'reset'])->name('password.update');
 
 // Auth — Student Registration
 Route::get('/register', [RegisterController::class, 'showStep1'])->name('register');

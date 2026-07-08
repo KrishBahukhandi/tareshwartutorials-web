@@ -93,8 +93,16 @@
     <div class="flex-1 flex items-center justify-center p-6 lg:p-12">
         <div class="w-full max-w-md">
 
+            {{-- Back to website --}}
+            <a href="{{ route('home') }}" class="inline-flex items-center gap-1.5 text-sm font-semibold text-gray-500 hover:text-[#031635] transition-colors mb-6">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                </svg>
+                Back to website
+            </a>
+
             {{-- Mobile logo --}}
-            <div class="flex items-center gap-2 mb-8 lg:hidden">
+            <a href="{{ route('home') }}" class="flex items-center gap-2 mb-8 lg:hidden">
                 <div class="w-8 h-8 bg-[#031635] rounded-lg flex items-center justify-center">
                     <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"
@@ -102,10 +110,17 @@
                     </svg>
                 </div>
                 <span class="font-bold text-[#031635]">Tareshwar Tutorials</span>
-            </div>
+            </a>
 
             <h2 class="text-2xl font-extrabold text-[#031635] mb-1">Welcome back</h2>
             <p class="text-sm text-gray-500 mb-7">Sign in to your account to continue where you left off.</p>
+
+            {{-- Success --}}
+            @if (session('success'))
+                <div class="mb-5 px-4 py-3 bg-emerald-50 border border-emerald-200 rounded-xl text-sm text-emerald-700">
+                    {{ session('success') }}
+                </div>
+            @endif
 
             {{-- Error --}}
             @if ($errors->any())
@@ -133,7 +148,7 @@
                     <div>
                         <div class="flex items-center justify-between mb-1.5">
                             <label class="text-xs font-semibold text-gray-600" for="password">Password</label>
-                            <a href="#" class="text-xs text-[#031635] font-semibold hover:underline">Forgot password?</a>
+                            <a href="{{ route('password.request') }}" class="text-xs text-[#031635] font-semibold hover:underline">Forgot password?</a>
                         </div>
                         <div class="relative">
                             <input type="password" id="password" name="password"
