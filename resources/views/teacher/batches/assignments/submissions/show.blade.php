@@ -18,13 +18,13 @@
         <div class="bg-white border border-gray-200 rounded-2xl shadow-sm overflow-hidden flex flex-col h-[600px]">
             <div class="px-4 py-3 border-b border-gray-100 bg-gray-50 flex items-center justify-between">
                 <span class="text-sm font-semibold text-gray-900">Student's Work</span>
-                <a href="{{ asset('storage/' . $submission->file_path) }}" download class="inline-flex items-center gap-1.5 text-sm font-medium text-[#1e3a8a] hover:text-blue-700">
+                <a href="{{ $submission->fileUrl() }}" download class="inline-flex items-center gap-1.5 text-sm font-medium text-[#1e3a8a] hover:text-blue-700">
                     <span class="material-symbols-outlined text-[18px]">download</span>
                     Download PDF
                 </a>
             </div>
             <div class="flex-1 bg-gray-100">
-                <iframe src="{{ asset('storage/' . $submission->file_path) }}#toolbar=0" class="w-full h-full border-0"></iframe>
+                <iframe src="{{ $submission->fileUrl() }}#toolbar=0" class="w-full h-full border-0"></iframe>
             </div>
         </div>
 

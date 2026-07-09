@@ -91,7 +91,7 @@ class BatchController extends Controller
     public function destroy(Batch $batch): RedirectResponse
     {
         $name = $batch->name;
-        Storage::disk('public')->deleteDirectory("batch-notes/{$batch->id}");
+        Storage::disk(config('filesystems.public_files'))->deleteDirectory("batch-notes/{$batch->id}");
         $batch->delete();
 
         return redirect()->route('admin.batches.index')

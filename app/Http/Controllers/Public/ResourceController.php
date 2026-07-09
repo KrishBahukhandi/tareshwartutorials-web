@@ -5,8 +5,9 @@ namespace App\Http\Controllers\Public;
 use App\Http\Controllers\Controller;
 use App\Models\FreeResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ResourceController extends Controller
 {
@@ -132,11 +133,11 @@ class ResourceController extends Controller
     }
 
     /** Direct PDF download. */
-    public function download(FreeResource $freeResource): BinaryFileResponse
+    public function download(FreeResource $freeResource): StreamedResponse
     {
         abort_unless($freeResource->is_published, 404);
         $freeResource->increment('download_count');
 
-        return response()->download(storage_path('app/public/'.$freeResource->file_path));
+        return Storage::disk(config('filesystems.public_files'))->download($freeResource->file_path);
     }
 }

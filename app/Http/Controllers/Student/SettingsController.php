@@ -26,7 +26,7 @@ class SettingsController extends Controller
         $user = auth()->user();
 
         if ($request->hasFile('profile_photo')) {
-            $validated['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+            $validated['profile_photo'] = $request->file('profile_photo')->store('profile-photos', config('filesystems.public_files'));
         }
 
         $validated['email_notifications'] = $request->boolean('email_notifications');

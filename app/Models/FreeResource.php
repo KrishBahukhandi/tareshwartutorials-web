@@ -121,6 +121,6 @@ class FreeResource extends Model
     /** Storage URL for the PDF. */
     public function fileUrl(): string
     {
-        return asset('storage/'.$this->file_path);
+        return \Storage::disk(config('filesystems.public_files'))->url($this->file_path);
     }
 }

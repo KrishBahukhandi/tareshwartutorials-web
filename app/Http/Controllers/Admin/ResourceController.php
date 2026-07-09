@@ -27,23 +27,23 @@ class ResourceController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'title'        => ['required', 'string', 'max:255'],
-            'description'  => ['nullable', 'string'],
-            'type'         => ['required', 'in:note,pyq,assignment'],
-            'class_level'  => ['required', 'in:10,11,12'],
-            'subject'      => ['required', 'string', 'max:100'],
-            'chapter'      => ['nullable', 'string', 'max:200'],
-            'board'        => ['nullable', 'string', 'max:50'],
-            'year'         => ['nullable', 'integer', 'min:2000', 'max:2099'],
-            'file'         => ['required', 'file', 'mimes:pdf', 'max:20480'],
+            'title' => ['required', 'string', 'max:255'],
+            'description' => ['nullable', 'string'],
+            'type' => ['required', 'in:note,pyq,assignment'],
+            'class_level' => ['required', 'in:10,11,12'],
+            'subject' => ['required', 'string', 'max:100'],
+            'chapter' => ['nullable', 'string', 'max:200'],
+            'board' => ['nullable', 'string', 'max:50'],
+            'year' => ['nullable', 'integer', 'min:2000', 'max:2099'],
+            'file' => ['required', 'file', 'mimes:pdf', 'max:20480'],
             'is_published' => ['boolean'],
         ]);
 
-        $path = $request->file('file')->store('free-resources', 'public');
+        $path = $request->file('file')->store('free-resources', config('filesystems.public_files'));
 
         FreeResource::create([
             ...$validated,
-            'file_path'    => $path,
+            'file_path' => $path,
             'is_published' => $request->boolean('is_published', true),
         ]);
 
@@ -53,7 +53,7 @@ class ResourceController extends Controller
 
     public function destroy(FreeResource $resource): RedirectResponse
     {
-        \Storage::disk('public')->delete($resource->file_path);
+        \Storage::disk(config('filesystems.public_files'))->delete($resource->file_path);
         $resource->delete();
 
         return back()->with('success', 'Resource deleted.');

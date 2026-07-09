@@ -59,7 +59,7 @@
                 @if($assignment->file_path)
                     <div>
                         <h3 class="text-lg font-semibold text-gray-900 mb-4">Reference Materials</h3>
-                        <a href="{{ asset('storage/' . $assignment->file_path) }}" target="_blank" class="inline-flex items-center gap-3 p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors w-full sm:w-auto">
+                        <a href="{{ $assignment->fileUrl() }}" target="_blank" class="inline-flex items-center gap-3 p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors w-full sm:w-auto">
                             <div class="w-10 h-10 rounded-lg bg-red-50 text-red-600 flex items-center justify-center shrink-0">
                                 <span class="material-symbols-outlined">picture_as_pdf</span>
                             </div>
@@ -114,7 +114,7 @@
                             </div>
                         @endif
 
-                        <a href="{{ asset('storage/' . $submission->file_path) }}" target="_blank" class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors mb-6">
+                        <a href="{{ $submission->fileUrl() }}" target="_blank" class="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors mb-6">
                             <span class="material-symbols-outlined text-red-500">picture_as_pdf</span>
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-medium text-gray-900 truncate">Your_Submission.pdf</p>

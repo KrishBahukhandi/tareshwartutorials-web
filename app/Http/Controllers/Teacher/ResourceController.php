@@ -36,7 +36,7 @@ class ResourceController extends Controller
         $file = $request->file('note_file');
         $originalName = $file->getClientOriginalName();
         $extension = strtolower($file->getClientOriginalExtension());
-        $path = $file->store("batch-notes/{$batch->id}", 'public');
+        $path = $file->store("batch-notes/{$batch->id}", config('filesystems.public_files'));
 
         BatchNote::create([
             'batch_id' => $batch->id,

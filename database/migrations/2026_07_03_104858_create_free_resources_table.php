@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description')->nullable();
-            $table->enum('type', ['note', 'pyq'])->default('note');
+            $table->string('type', 20)->default('note');
             $table->string('class_level', 5); // '10', '11', '12'
             $table->string('subject', 100);   // 'Mathematics', 'Physics', etc.
             $table->string('chapter', 200)->nullable();

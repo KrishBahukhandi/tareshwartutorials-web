@@ -17,6 +17,20 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Public Files Disk
+    |--------------------------------------------------------------------------
+    |
+    | The disk used for user-facing files (resource PDFs, profile photos,
+    | batch notes, branding). Local development uses the "public" disk;
+    | production points this at "supabase" since the app host's filesystem
+    | is wiped on every deploy.
+    |
+    */
+
+    'public_files' => env('PUBLIC_FILES_DISK', 'public'),
+
+    /*
+    |--------------------------------------------------------------------------
     | Filesystem Disks
     |--------------------------------------------------------------------------
     |
@@ -56,6 +70,22 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'throw' => false,
+            'report' => false,
+        ],
+
+        'supabase' => [
+            'driver' => 's3',
+            'key' => env('SUPABASE_S3_ACCESS_KEY_ID'),
+            'secret' => env('SUPABASE_S3_SECRET_ACCESS_KEY'),
+            'region' => env('SUPABASE_S3_REGION', 'ap-northeast-1'),
+            'bucket' => env('SUPABASE_S3_BUCKET', 'public-files'),
+            'endpoint' => env('SUPABASE_S3_ENDPOINT'),
+            'use_path_style_endpoint' => true,
+            // Public object URL base, so Storage::url() links straight to
+            // Supabase's CDN-served public endpoint instead of signing URLs.
+            'url' => env('SUPABASE_S3_PUBLIC_URL'),
+            'visibility' => 'public',
             'throw' => false,
             'report' => false,
         ],

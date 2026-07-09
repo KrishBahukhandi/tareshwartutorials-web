@@ -17,7 +17,7 @@ class PublicController extends Controller
             ->orderBy('created_at', 'desc')
             ->take(3)
             ->get();
-            
+
         return view('public.home', compact('featuredBatches'));
     }
 
@@ -28,20 +28,20 @@ class PublicController extends Controller
             ->with(['teachers', 'subjects'])
             ->withEnrollmentCount()
             ->orderBy('created_at', 'desc');
-        
+
         if ($request->has('search')) {
             $query->where(function ($query) use ($request): void {
-                $query->where('name', 'like', '%'.$request->search.'%')
-                    ->orWhereHas('subjects', fn($sq) => $sq->where('name', 'like', '%'.$request->search.'%'));
+                $query->whereLike('name', '%'.$request->search.'%')
+                    ->orWhereHas('subjects', fn ($sq) => $sq->whereLike('name', '%'.$request->search.'%'));
             });
         }
 
         if ($request->filled('grade')) {
             $query->where('grade', $request->grade);
         }
-        
+
         $batches = $query->paginate(12);
-        
+
         return view('public.batches', compact('batches'));
     }
 
@@ -141,7 +141,7 @@ class PublicController extends Controller
         if ($search) {
             $search = strtolower($search);
             $filteredTopics = $filteredTopics->filter(function ($topic) use ($search) {
-                return str_contains(strtolower($topic['title']), $search) || 
+                return str_contains(strtolower($topic['title']), $search) ||
                        str_contains(strtolower($topic['content']), $search);
             });
         }

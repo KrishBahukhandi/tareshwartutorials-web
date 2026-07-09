@@ -58,8 +58,8 @@ class SearchController extends Controller
 
                 if ($freeText !== '') {
                     $batchQuery->where(function ($q) use ($freeText): void {
-                        $q->where('name', 'like', '%'.$freeText.'%')
-                            ->orWhereHas('subjects', fn ($sq) => $sq->where('name', 'like', '%'.$freeText.'%'));
+                        $q->whereLike('name', '%'.$freeText.'%')
+                            ->orWhereHas('subjects', fn ($sq) => $sq->whereLike('name', '%'.$freeText.'%'));
                     });
                 }
 
@@ -75,10 +75,10 @@ class SearchController extends Controller
 
             if ($freeText !== '') {
                 $resourceQuery->where(function ($q) use ($freeText): void {
-                    $q->where('title', 'like', '%'.$freeText.'%')
-                        ->orWhere('subject', 'like', '%'.$freeText.'%')
-                        ->orWhere('chapter', 'like', '%'.$freeText.'%')
-                        ->orWhere('description', 'like', '%'.$freeText.'%');
+                    $q->whereLike('title', '%'.$freeText.'%')
+                        ->orWhereLike('subject', '%'.$freeText.'%')
+                        ->orWhereLike('chapter', '%'.$freeText.'%')
+                        ->orWhereLike('description', '%'.$freeText.'%');
                 });
             }
 

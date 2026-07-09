@@ -45,12 +45,12 @@ class AssignmentController extends Controller
 
         $submission = $assignment->submissions()->where('student_id', auth()->id())->first();
 
-        $filePath = $request->file('submission_file')->store('assignments/submissions', 'public');
+        $filePath = $request->file('submission_file')->store('assignments/submissions', config('filesystems.public_files'));
 
         if ($submission) {
             // Re-submission logic
             if ($submission->file_path) {
-                Storage::disk('public')->delete($submission->file_path);
+                Storage::disk(config('filesystems.public_files'))->delete($submission->file_path);
             }
             $submission->update([
                 'file_path' => $filePath,

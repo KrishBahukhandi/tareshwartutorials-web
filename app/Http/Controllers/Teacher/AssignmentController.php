@@ -41,7 +41,7 @@ class AssignmentController extends Controller
         $assignment = new Assignment($validated);
 
         if ($request->hasFile('file')) {
-            $assignment->file_path = $request->file('file')->store('assignments/questions', 'public');
+            $assignment->file_path = $request->file('file')->store('assignments/questions', config('filesystems.public_files'));
         }
 
         $batch->assignments()->save($assignment);
@@ -57,7 +57,7 @@ class AssignmentController extends Controller
         abort_if($assignment->batch_id !== $batch->id, 404);
 
         if ($assignment->file_path) {
-            Storage::disk('public')->delete($assignment->file_path);
+            Storage::disk(config('filesystems.public_files'))->delete($assignment->file_path);
         }
 
         $assignment->delete();

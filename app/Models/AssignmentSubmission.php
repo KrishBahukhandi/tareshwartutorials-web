@@ -34,4 +34,10 @@ class AssignmentSubmission extends Model
     {
         return $this->belongsTo(User::class, 'student_id');
     }
+
+    /** Public URL for the submitted PDF. */
+    public function fileUrl(): string
+    {
+        return \Storage::disk(config('filesystems.public_files'))->url($this->file_path);
+    }
 }

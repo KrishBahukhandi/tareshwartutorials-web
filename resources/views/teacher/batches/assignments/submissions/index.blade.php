@@ -105,7 +105,7 @@
                     @endif
                     @if($assignment->file_path)
                         <div class="pt-4 border-t border-gray-100">
-                            <a href="{{ asset('storage/' . $assignment->file_path) }}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-[#1e3a8a] hover:text-blue-700">
+                            <a href="{{ $assignment->fileUrl() }}" target="_blank" class="inline-flex items-center gap-2 text-sm font-medium text-[#1e3a8a] hover:text-blue-700">
                                 <span class="material-symbols-outlined text-[20px]">description</span>
                                 View Question Paper
                             </a>

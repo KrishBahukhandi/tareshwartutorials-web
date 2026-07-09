@@ -120,7 +120,7 @@ class User extends Authenticatable
     public function profilePhotoUrl(): string
     {
         return $this->profile_photo
-            ? asset('storage/'.$this->profile_photo)
+            ? \Storage::disk(config('filesystems.public_files'))->url($this->profile_photo)
             : 'https://ui-avatars.com/api/?name='.urlencode($this->name).'&background=1e3a5f&color=fff&size=128';
     }
 

@@ -30,7 +30,7 @@ class TeacherController extends Controller
         $data = $request->validated();
 
         if ($request->hasFile('profile_photo')) {
-            $data['profile_photo'] = $request->file('profile_photo')->store('profile-photos', 'public');
+            $data['profile_photo'] = $request->file('profile_photo')->store('profile-photos', config('filesystems.public_files'));
         }
 
         $teacher = User::create([

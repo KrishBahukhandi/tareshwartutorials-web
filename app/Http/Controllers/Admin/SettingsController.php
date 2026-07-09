@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Validation\Rules\Password;
 use Illuminate\View\View;
 
@@ -20,7 +21,7 @@ class SettingsController extends Controller
         return view('admin.settings.index', [
             'admin' => Auth::user(),
             'schoolName' => Setting::get('school_name', config('app.name')),
-            'schoolLogoUrl' => $logoPath ? asset('storage/'.$logoPath) : null,
+            'schoolLogoUrl' => $logoPath ? Storage::disk(config('filesystems.public_files'))->url($logoPath) : null,
         ]);
     }
 
@@ -46,7 +47,7 @@ class SettingsController extends Controller
         ]);
 
         if ($request->hasFile('profile_photo')) {
-            $admin->profile_photo = $request->file('profile_photo')->store('profile-photos', 'public');
+            $admin->profile_photo = $request->file('profile_photo')->store('profile-photos', config('filesystems.public_files'));
         }
 
         if ($request->filled('new_password')) {
@@ -63,7 +64,7 @@ class SettingsController extends Controller
         }
 
         if ($request->hasFile('logo')) {
-            Setting::set('school_logo', $request->file('logo')->store('branding', 'public'));
+            Setting::set('school_logo', $request->file('logo')->store('branding', config('filesystems.public_files')));
         }
 
         return back()->with('success', 'Settings saved successfully.');
