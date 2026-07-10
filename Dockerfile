@@ -37,6 +37,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         intl \
         opcache \
     && a2enmod rewrite \
+    && mv "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini" \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /var/www/html
