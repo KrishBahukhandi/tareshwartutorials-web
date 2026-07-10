@@ -21,4 +21,20 @@ php artisan migrate --force
 # Only meaningful when PUBLIC_FILES_DISK=public; harmless otherwise.
 php artisan storage:link || true
 
+# Render's free tier spins the service down after ~15 min without inbound
+# traffic, giving the next visitor a 20s+ cold start. Requesting our own
+# public URL every 5 minutes keeps the idle timer from ever firing. The
+# request must go through the public URL (not localhost) so it registers
+# as traffic at Render's edge. Set SELF_PING_URL to override which URL is
+# pinged; the loop is skipped entirely when both it and APP_URL are unset.
+PING_URL="${SELF_PING_URL:-${APP_URL:+${APP_URL}/up}}"
+if [ -n "${PING_URL}" ]; then
+    (
+        while true; do
+            sleep 300
+            curl -fsS --max-time 30 --retry 2 --retry-delay 5 "${PING_URL}" > /dev/null 2>&1 || true
+        done
+    ) &
+fi
+
 exec apache2-foreground
